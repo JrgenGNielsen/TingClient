@@ -100,6 +100,6 @@ class ting_client_class implements ItingClientInterface {
     $client = $this->tingClient();
     $result = $client->execute($request);
 
-    var_dump($result);
+    return $result;
   }
 }
