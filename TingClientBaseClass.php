@@ -9,7 +9,7 @@ require_once 'ting_client_autoload.php';
  *
  */
 
-class ting_client_class implements ItingClientInterface {
+class TingClientBaseClass implements ItingClientInterface {
 
   /**
    * Get the Client. TingClient is handled as singleton.

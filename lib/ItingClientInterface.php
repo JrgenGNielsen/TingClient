@@ -42,7 +42,7 @@ interface ItingClientInterFace{
    * @return mixed
    *  response from webservice
    */
-  public function do_request($requestName, $params, $cache_me=TRUE);
+  public function do_request($requestName, $params);
 
   /**
    * Replace url placeholders with valid urls.
