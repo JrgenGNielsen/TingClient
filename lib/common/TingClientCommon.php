@@ -51,6 +51,8 @@ class TingClientCommon {
     // check in temp dir for the xsd.
     $dir = sys_get_temp_dir();
     $path = $dir . '/' . $filename;
+
+
     if (!file_exists($path)) {
       // get and store file in temp dir
       $file = file_get_contents($xsd_url);

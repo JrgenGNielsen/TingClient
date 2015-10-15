@@ -34,6 +34,7 @@ class TingClientWebserviceSettings {
       'forsrights' => array(
         'class' => 'bibdk_forsrights',
         'url' => 'bibdk_forsrights_url',
+        'xsd_url' => 'bibdk_forsrights_xsd',
         'xsdNamespace' => array(0 => 'http://oss.dbc.dk/ns/forsrights'),
       ),
     );
@@ -47,6 +48,7 @@ class TingClientWebserviceSettings {
       ),
       'forsrights' => array(
         'bibdk_forsrights_url' => 'http://forsrights.addi.dk/1.2/',
+        'bibdk_forsrights_xsd' => 'http://forsrights.addi.dk/1.2/forsrights.xsd',
       )
     );
   }
