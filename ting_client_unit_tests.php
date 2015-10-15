@@ -1,5 +1,5 @@
 <?php
-require_once 'TingClientBaseClass.php';
+require_once 'lib/TingClient.php';
 
 class TestCustomCacher implements ITingClientCacherInterface {
   private static $cache = array();
@@ -55,23 +55,22 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
    * Test that all objects has been loaded with ting_client_class
    */
   public function test_objects() {
-    $ting_class = new TingClientBaseClass();
-    $this->assertTrue(is_object($ting_class), 'ting client class initialized');
+    $tingClass = new TingClient();
+    $this->assertTrue(is_object($tingClass), 'ting client class initialized');
 
-    $client = $ting_class->tingClient();
-    $this->assertTrue($client instanceof TingClient, 'ting client initialized');
+    $this->assertTrue($tingClass instanceof TingClient, 'ting client initialized');
 
     $url = 'hest';
     $soapclient = new TingNanoClient($url);
     $this->assertTrue(is_object($soapclient), 'nano client initialized');
 
     // test chat custom cachder can be set
-    $ting_class->setCacher(new TestCustomCacher());
-    $client = $ting_class->tingClient();
-    $obj = new ReflectionObject($client);
+    $tingClass->setCacher(new TestCustomCacher());
+
+    $obj = new ReflectionObject($tingClass);
     $cacher = $obj->getProperty('cacher');
     $cacher->setAccessible(TRUE);
-    $this->assertTrue($cacher->getValue($client) instanceof TestCustomCacher, 'custom cache set');
+    $this->assertTrue($cacher->getValue($tingClass) instanceof TestCustomCacher, 'custom cache set');
 
     // test getSoapCLient method
     $method = $obj->getMethod('getSoapClient');
@@ -80,27 +79,27 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
     $url = 'http://forsrights.addi.dk/1.2/forsrights.wsdl';
     $request = new TestRequest($url, 'NANO');
 
-    $soap = $method->invokeArgs($client, array($request));
+    $soap = $method->invokeArgs($tingClass, array($request));
     $this->assertTrue($soap instanceof TingNanoClient);
 
     $request = new TestRequest($url, 'SOAPCLIENT');
-    $soap = $method->invokeArgs($client, array($request));
+    $soap = $method->invokeArgs($tingClass, array($request));
     $this->assertTrue($soap instanceof TingSoapClient);
 
     $request = new TestRequest($url, 'HEST');
     try {
-      $soap = $method->invokeArgs($client, array($request));
+      $soap = $method->invokeArgs($tingClass, array($request));
     } catch (Exception $e) {
       $this->assertTrue($e instanceof TingClientSoapException);
     }
 
     // test that custom logger can be set
-    $ting_class->setLogger(new TestCustomLogger());
-    $client = $ting_class->tingClient();
-    $obj = new ReflectionObject($client);
+    $tingClass->setLogger(new TestCustomLogger());
+
+    $obj = new ReflectionObject($tingClass);
     $logger = $obj->getProperty('logger');
     $logger->setAccessible(TRUE);
-    $this->assertTrue($logger->getValue($client) instanceof TestCustomLogger, 'custom logger set');
+    $this->assertTrue($logger->getValue($tingClass) instanceof TestCustomLogger, 'custom logger set');
   }
 
   public function test_request() {
@@ -156,7 +155,7 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
 
   public function test_functions() {
     // test that webservices can be added and configured
-    $ting_class = new TingClientBaseClass();
+    $tingClass = new TingClient();
     $addi_urls = array(
       'forsrights' => array(
         'class' => 'bibdk_forsrights',
@@ -167,7 +166,7 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
     );
 
     // assert that real urls can be set
-    $ting_class->add_to_request_factory($addi_urls);
+    $tingClass->addToRequestFactory($addi_urls);
     $url = 'http://forsrights.addi.dk/1.2/';
     $xsd_url = 'http://forsrights.addi.dk/1.2/forsrights.xsd';
     $real_urls = array(
@@ -176,12 +175,12 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
         'bibdk_forsrights_xsd' => $xsd_url,
       )
     );
-    $ting_class->sanitize_webservices($real_urls);
+    $tingClass->sanitizeWebservices($real_urls);
 
-    $this->assertTrue($ting_class->tingClient()
-        ->request_factory()->urls['forsrights']['url'] == $url, 'url was sanitized');
-    $this->assertTrue($ting_class->tingClient()
-        ->request_factory()->urls['forsrights']['xsd_url'] == $xsd_url, 'xsd url was sanitized');
+    $this->assertTrue($tingClass
+        ->requestFactory()->urls['forsrights']['url'] == $url, 'url was sanitized');
+    $this->assertTrue($tingClass
+        ->requestFactory()->urls['forsrights']['xsd_url'] == $xsd_url, 'xsd url was sanitized');
 
     // assert that parameters are ordered by given xsd
     $params = array(
@@ -191,8 +190,8 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
       'passwordAut' => '20Koster',
       'outputType' => 'json',
     );
-    $request1 = $ting_class->tingClient()
-      ->request_factory()
+    $request1 = $tingClass
+      ->requestFactory()
       ->getNamedRequest('forsrights', $params);
 
     $params = array(
@@ -202,14 +201,14 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
       'action' => 'forsRightsRequest',
       'outputType' => 'json',
     );
-    $request2 = $ting_class->tingClient()
-      ->request_factory()
+    $request2 = $tingClass
+      ->requestFactory()
       ->getNamedRequest('forsrights', $params);
 
     $this->assertEquals($request1->getParameters(), $request2->getParameters(), 'parameters was reorganized according to xsd');
 
     //assert that xsd was stored in temporary folder
-    $file_name = TingClientCommon::url_to_filename($xsd_url);
+    $file_name = TingClientCommon::urlToFilename($xsd_url);
     $dir = sys_get_temp_dir();
     $this->assertTrue(file_exists($dir . '/' . $file_name), 'xsd file stored in temp folder');
   }

@@ -17,11 +17,11 @@ class xmlSchema {
   public function __construct()
   { }
 
-  public function get_sequence_array($element_name) {
-    $seq = $this->get_sequence($element_name);
+  public function getSequenceArray($element_name) {
+    $seq = $this->getSequence($element_name);
 
     foreach ($seq as $element) {
-      $arr[] = $this->get_element_attributes($element);
+      $arr[] = $this->getElementAttributes($element);
     }
 
     foreach ($arr as $key => $val) {
@@ -31,7 +31,7 @@ class xmlSchema {
     return $ret;
   }
 
-  public function get_from_file($filename) {
+  public function getFromFile($filename) {
     $dom = new DOMDocument();
     if ( !@$dom->load($filename) ) {
       // try to download XSDs from URLs
@@ -45,21 +45,21 @@ class xmlSchema {
     $this->xpath = new DOMXPath($dom);
   }
 
-  public function get_from_url($filename) {
+  public function getFromUrl($filename) {
     $dom = new DOMDocument();
     if (! @$dom->load($filename))
       die("could not open file: ".$filename."\n" );
     $this->xpath = new DOMXPath($dom);
   }
 
-  public function set_from_xml($xml) {
+  public function setFromXml($xml) {
     $dom = new DOMDocument();
     if (!@$dom->loadXML($xml) )
       die("could not load xml");
     $this->xpath = new DOMXPath($dom);
   }
 
-  public function get_element_attributes($element_name) {
+  public function getElementAttributes($element_name) {
     $element = helpFunc::split($element_name);
 
     $query = "//*[@name='" . $element . "']/@*";
@@ -72,7 +72,7 @@ class xmlSchema {
     return $ret;
   }
 
-  public function is_simple_type($element_name) {
+  public function isSimpleType($element_name) {
     $query = "//*[@name='" . $element_name . "']/@*";
     $nodes = $this->xpath->query($query);
     foreach ($nodes as $node) {
@@ -102,7 +102,7 @@ class xmlSchema {
     return false;
   }
 
-  public function get_sequence($element_name) {
+  public function getSequence($element_name) {
     $element = helpFunc::split($element_name);
 
     $query = "//*[@name='" . $element . "']//*[local-name()='element']/@*";
@@ -136,7 +136,7 @@ class xmlSchema {
 }
 class helpFunc {
   /** Return true if given path starts with 'http(s)' */
-  public static function is_url($path) {
+  public static function isUrl($path) {
     $elements = parse_url($path);
     //print_r($elements);
     if (strtolower($elements['scheme']) == 'http' ||  strtolower($elements['scheme']) == 'https')
@@ -152,7 +152,7 @@ class helpFunc {
     return $string;
   }
 
-  public static function get_type($element) {
+  public static function getType($element) {
     if (strpos($element, ':') > 0) {
       $split = explode(':', $element);
       return $split[0];
@@ -160,7 +160,7 @@ class helpFunc {
     return false;
   }
 
-  public static function soap_header($namespaces) {
+  public static function soapHeaders($namespaces) {
     $ret .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope"'."\n";
     foreach ($namespaces as $prefix => $namespace) {
       $ret .= 'xmlns:'.$prefix.'="'.$namespace."\"\n";
@@ -172,7 +172,7 @@ class helpFunc {
     return $ret;
   }
 
-  public static function soap_footer() {
+  public static function soapFooter() {
     $ret .= '</SOAP-ENV:Body>'."\n";
     $ret .= '</SOAP-ENV:Envelope>'."\n";
 

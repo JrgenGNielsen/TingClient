@@ -13,7 +13,7 @@ class TingClientCommon {
    * @return bool
    *  Whether string is valid xml or not
    */
-  public static function validate_xml($xml) {
+  public static function validateXml($xml) {
     $dom = new DOMDocument();
     if (@$dom->loadXML($xml)) {
       return TRUE;
@@ -27,7 +27,7 @@ class TingClientCommon {
    * @param $url
    * @return string
    */
-  public static function url_to_filename($url) {
+  public static function urlToFilename($url) {
     $parts = parse_url($url);
     // do not use the protocol (http) in filename
     unset($parts['scheme']);
@@ -47,38 +47,35 @@ class TingClientCommon {
    *
    * */
   public static function checkXsd($xsd_url, array $params) {
-    $filename = self::url_to_filename($xsd_url);
+    $filename = self::urlToFilename($xsd_url);
     // check in temp dir for the xsd.
     $dir = sys_get_temp_dir();
     $path = $dir . '/' . $filename;
-
 
     if (!file_exists($path)) {
       // get and store file in temp dir
       $file = file_get_contents($xsd_url);
       // only store valid xsd files
-      if (self::validate_xml($file)) {
+      if (self::validateXml($file)) {
         file_put_contents($dir . '/' . $filename, $file);
       }
       else{
         return $params;
       }
     }
-    return self::validate_xsd($path, $params);
+
+    return self::validateXsd($path, $params);
   }
 
 
-  private static function validate_xsd($path, $params){
-
-    //return $params;
-
+  private static function validateXsd($path, $params){
      $schema = new xmlSchema();
-     $schema->get_from_file($path);
+     $schema->getFromFile($path);
 
-     $seq = $schema->get_sequence($params['action']);
+     $seq = $schema->getSequence($params['action']);
      $arr[] = 'action';
      foreach ($seq as $element) {
-       $s = $schema->get_element_attributes($element);
+       $s = $schema->getElementAttributes($element);
        $arr[] = $s['name'];
      }
 
@@ -91,8 +88,7 @@ class TingClientCommon {
         $parsed_params[$real_param] = $params[$real_param];
       }
     }
+
     return $parsed_params;
-
   }
-
 }

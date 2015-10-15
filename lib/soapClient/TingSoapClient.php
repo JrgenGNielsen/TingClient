@@ -51,13 +51,13 @@ class TingSoapClient implements ITingSoapClientInterface{
     }
     catch(Exception $e){
       // set status code to 400 (bad request)
-      $this->set_curl_info('400');
+      $this->setCurlInfo('400');
       return FALSE;
     }
 
     // all went well
     $this->requestBodyString = $this->soapClient->__getLastRequest();
-    $this->set_curl_info();
+    $this->setCurlInfo();
 
     return $data;
   }
@@ -80,13 +80,13 @@ class TingSoapClient implements ITingSoapClientInterface{
    *
    * @param int null $errorcode;
    */
-  private function set_curl_info($errorcode = NULL){
+  private function setCurlInfo($errorcode = NULL){
     if(!empty($errorcode)){
       $this->curl_info = array('http_code'=>$errorcode);
       return;
     }
     $responseHeaders = $this->soapClient->__getLastResponseHeaders();
-    $this->curl_info = $this->parse_response_header($responseHeaders);
+    $this->curl_info = $this->parseResponseHeader($responseHeaders);
     return;
   }
 
@@ -94,7 +94,7 @@ class TingSoapClient implements ITingSoapClientInterface{
    * @param $headerstring string. Responsehader from soapclient
    * @return array
    */
-  private function parse_response_header($headerstring){
+  private function parseResponseHeader($headerstring){
     if(strpos($headerstring,'HTTP/1.1 200 OK')!==FALSE){
       return array('http_code'=>'200');
     }

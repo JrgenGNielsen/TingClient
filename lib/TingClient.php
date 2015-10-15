@@ -22,17 +22,15 @@ class TingClient {
    * @return TingClientRequestFactory
    *  instance of private memeber request_factory
    */
-  private static $request_factory;
-  public function request_factory() {
-    if (!isset(self::$request_factory)) {
-      self::$request_factory = new TingClientRequestFactory();
-    }
-    return self::$request_factory;
+  private static $requestFactory;
+  public function requestFactory() {
+    return self::$requestFactory;
   }
 
   public function __construct(ITingClientRequestCache $cacher = NULL,  TingClientLogger $logger = NULL) {
     $this->logger = (isset($logger)) ? $logger : new TingClientVoidLogger();
     $this->cacher = (isset($cacher)) ? $cacher : new TingClientCacher();
+    self::$requestFactory = new TingClientRequestFactory();
   }
 
   public function execute(TingClientRequest $request) {
@@ -66,9 +64,9 @@ class TingClient {
    * @return mixed
    *  response from webservice
    */
-  public function do_request($requestName, $params, $cache_me = TRUE) {
-    $this->sanitize_webservices();
-    $request = $this->request_factory()->getNamedRequest($requestName, $params);
+  public function doRequest($requestName, $params, $cache_me = TRUE) {
+    $this->sanitizeWebservices();
+    $request = $this->requestFactory()->getNamedRequest($requestName, $params);
     $result = $this->execute($request);
 
     return $result;
@@ -93,8 +91,8 @@ class TingClient {
    *  xsdNamespace and custom_parse are optional.
    *
    * */
-  public function add_to_request_factory($webservice_settings = array()) {
-    $this->request_factory()->add_to_urls($webservice_settings);
+  public function addToRequestFactory($webservice_settings = array()) {
+    $this->requestFactory()->add_to_urls($webservice_settings);
   }
 
   /**
@@ -105,7 +103,7 @@ class TingClient {
    *  array('search' => array('ting_search_url' => 'http://opensearch.addi.dk/4.0.1)/',
    *        ('   )
    */
-  public function sanitize_webservices($real_urls = array()) {
+  public function sanitizeWebservices($real_urls = array()) {
     $url_variables = $real_urls;
     // merge in default urls
     $url_variables += TingClientWebserviceSettings::getDefaultUrls();
@@ -113,7 +111,7 @@ class TingClient {
       if ( !$url ) {
         throw new Exception( 'ting-client: Webservice URL is not defined for ' . $name);
       }
-      $this->request_factory()->set_real_urls($name, $url);
+      $this->requestFactory()->set_real_urls($name, $url);
     }
   }
 
