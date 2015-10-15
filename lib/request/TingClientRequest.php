@@ -25,7 +25,6 @@ abstract class TingClientRequest implements ITingClientRequestCache{
 
   public function __construct($wsdlUrl, $serviceName = NULL) {
     $this->wsdlUrl = $wsdlUrl;
-    //$this->wsdlUrl = $wsdlUrl;
   }
 
   /** \brief make a cachekey based on request parameters
@@ -133,6 +132,7 @@ abstract class TingClientRequest implements ITingClientRequestCache{
     if (!is_object($response)) {
       throw new TingClientException('Unexpected JSON response: ' . var_export($response, true));
     }
+
     return $this->processResponse($response);
   }
 

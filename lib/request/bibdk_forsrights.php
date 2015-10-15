@@ -23,7 +23,7 @@ class bibdk_forsrights extends TingClientRequest {
 
   // empty;
   public function processResponse(stdClass $result) {
-    return $result;
+    return $this->parseResponse($result);
   }
 
 }
