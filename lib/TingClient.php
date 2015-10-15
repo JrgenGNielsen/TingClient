@@ -6,18 +6,19 @@ require_once 'ting_client_autoload.php';
  * @file Class TingClient
  */
 
-class TingClient {
+class TingClient implements ItingClientInterFace{
   /**
    * @var TingClientLogger
    */
   private $logger;
+
   /*
    * $var $cacher
    */
   private $cacher;
 
   /**
-   * Get Request factory. Request factory is handled as singleton
+   * Get Request factory.
    *
    * @return TingClientRequestFactory
    *  instance of private memeber request_factory
@@ -41,6 +42,8 @@ class TingClient {
     }
 
     // not found in cache - get the client to do the real call
+
+    // @TODO try catch
     $soapCLient = $this->getSoapClient($request);
     $action = $request->getParameter('action');
     $request->unsetParameter('action');
@@ -116,10 +119,18 @@ class TingClient {
   }
 
 
+  /**
+   * Set private member cacher
+   * @param \ITingClientCacherInterface $cacher
+   */
   public function setCacher(ITingClientCacherInterface $cacher){
     $this->cacher = $cacher;
   }
 
+  /**
+   * Set private member logger
+   * @param \TingClientLogger $logger
+   */
   public function setLogger(TingClientLogger $logger){
     $this->logger = $logger;
   }
