@@ -29,6 +29,7 @@ class TestRequest extends TingClientRequest{
     parent::__construct($wsdlUrl);
   }
 
+  // overwrite parent method
   public function getClientType(){
     return $this->clientType;
   }
@@ -107,7 +108,7 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
     $request = new TestRequest($url);
     $this->assertTrue($request instanceof TingClientRequest);
 
-    // test cachekey function
+
     $params = array(
       'action' => 'HEST',
       'fisk' => 'guppy',
@@ -116,9 +117,13 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
         'spurv',
       )
     );
-
-    $key = md5('actionHESTfiskguppyfugle0stær1spurv');
     $request->setParameters($params);
+
+    // assert that parameters has been set
+    $this->assertEquals($request->getParameters(), $params, 'parameters set and get success');
+
+    // test cachekey function
+    $key = md5('actionHESTfiskguppyfugle0stær1spurv');
     $this->assertTrue($request->cacheKey() == $key, 'cache key set as expected');
 
     // assert that trackingId does NOT alter cachekey
