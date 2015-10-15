@@ -42,8 +42,10 @@ class TingClient {
 
     // not found in cache - get the client to do the real call
     $soapCLient = $this->getSoapClient($request);
-    $requestAdapter = new TingClientRequestAdapter($soapCLient);
-    $response = $requestAdapter->execute($request);
+    $action = $request->getParameter('action');
+    $request->unsetParameter('action');
+    $params = $request->getParameters();
+    $response = $soapCLient->call($action, $params);
 
     $this->cacher->set($cache_key, $response);
     return $response;

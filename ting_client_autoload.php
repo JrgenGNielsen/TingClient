@@ -8,7 +8,6 @@ spl_autoload_register(function ($class_name) {
     'lib/cache/',
     'lib/request/',
     'lib/exception/',
-    'lib/adapter/',
     'lib/log/',
     'lib/result/',
     'lib/soapClient/',

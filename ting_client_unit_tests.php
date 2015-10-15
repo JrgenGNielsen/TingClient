@@ -1,5 +1,5 @@
 <?php
-require_once 'ting-client/ting_client_class.php';
+require_once 'TingClientBaseClass.php';
 
 class TestCustomCacher implements ITingClientCacherInterface{
   private static $cache = array();
@@ -27,10 +27,8 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
    * Test that all objects has been loaded with ting_client_class
    */
   public function test_objects() {
-    $ting_class = new ting_client_class();
+    $ting_class = new TingClientBaseClass();
     $this->assertTrue(is_object($ting_class), 'ting client class initialized');
-
-
 
     $client = $ting_class->tingClient();
     $this->assertTrue($client instanceof TingClient, 'ting client initialized');
@@ -38,9 +36,6 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
     $url = 'hest';
     $soapclient = new TingNanoClient($url);
     $this->assertTrue(is_object($soapclient), 'nano client initialized');
-
-    $adapter = new TingClientRequestAdapter($soapclient);
-    $this->assertTrue(is_object($adapter), 'requestadapter initialized');
 
     // test chat custom cachder can be set
     $ting_class->setCacher(new TestCustomCacher());
@@ -61,7 +56,7 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
 
   public function test_functions() {
     // test that webservices can be added and configured
-    $ting_class = new ting_client_class();
+    $ting_class = new TingClientBaseClass();
     $addi_urls = array(
       'forsrights' => array(
         'class' => 'bibdk_forsrights',
