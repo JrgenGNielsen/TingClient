@@ -1,7 +1,7 @@
 <?php
 require_once 'lib/TingClient.php';
 
-class TestCustomCacher implements ITingClientCacherInterface {
+class TestCustomCacher implements TingClientCacherInterface {
   private static $cache = array();
 
   function set($key, $value, $storage = NULL, $expire = NULL) {

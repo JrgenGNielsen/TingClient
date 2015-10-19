@@ -12,18 +12,22 @@ class bibdk_forsrights extends TingClientRequest {
 
   }
 
-  /* \brief implements ITingClientRequestCache::cacheBin
-   * 
-   * @return string; name of cachebin
+  /**
+   * Get location of cache.
+   * @return string
+   *  Name of location
    */
-
   public function cacheBin() {
     return 'cache_forsrights_webservice';
   }
 
-  // empty;
+  /**
+   *
+   * @param \stdClass $result
+   * @return mixed
+   * @throws \TingClientException
+   */
   public function processResponse(stdClass $result) {
     return $this->parseResponse($result);
   }
-
 }

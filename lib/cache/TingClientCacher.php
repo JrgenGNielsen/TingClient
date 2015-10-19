@@ -4,7 +4,7 @@
  * @file Class TingClientCacher
  * Default implementation - override in extending methods
  */
-class TingClientCacher implements ITingClientCacherInterface{
+class TingClientCacher implements TingClientCacherInterface{
 
   private static $cache = array();
   public function __construct(){}

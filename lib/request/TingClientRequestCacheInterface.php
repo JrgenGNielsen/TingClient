@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @file  Interface ITingClientRequestCache
+ * @file  Interface TingClientRequestCacheInterface
  *
  */
-interface ITingClientRequestCache {
+interface TingClientRequestCacheInterface {
 
   public function cacheKey();
 

@@ -1,22 +1,36 @@
 <?php
-// little program to parse fields from xsd
-//print_r($arr);
-/*foreach($arr as $key => $val)
-  // $ret[] = $val['name'];
-  echo '"'.$val['name'].'"=>"'.strtoupper($val['name']).'",'."\n";
 
-
-print_r($ret);
-//echo count($arr)."\n";
-//print_r($seq);*/
+/**
+ * Class xmlSchema.
+ *
+ * Load a xml schema definition and retrive element definitions.
+ *
+ * Sample usage; Get an array describing checkElectronicDeliveryRequest element
+ * from openorder.xsd;
+ *
+ * $schema = new xmlSchema();
+ * $schema -> getFromFile ('opeorder.xsd')
+ * $definition = $schema -> getSequenceArray ('checkElectronicDeliveryRequest')
+ *
+ */
 
 
 class xmlSchema {
+  /**
+   * @var DOMXPath xpath;
+   */
   public $xpath;
 
   public function __construct()
   { }
 
+  /**
+   * Get an array describing an element
+   * @param $element_name;
+   *  Name of the element
+   * @return array | NULL
+   *  Elementdefinition or NULL if element was not found
+   */
   public function getSequenceArray($element_name) {
     $seq = $this->getSequence($element_name);
 
@@ -31,6 +45,11 @@ class xmlSchema {
     return $ret;
   }
 
+  /**
+   * Load xsd from file.
+   * @param string $filename
+   * @throws \Exception
+   */
   public function getFromFile($filename) {
     $dom = new DOMDocument();
     if ( !@$dom->load($filename) ) {
@@ -45,6 +64,10 @@ class xmlSchema {
     $this->xpath = new DOMXPath($dom);
   }
 
+  /**
+   * Load xsd from url.
+   * @param string $filename
+   */
   public function getFromUrl($filename) {
     $dom = new DOMDocument();
     if (! @$dom->load($filename))
@@ -52,6 +75,10 @@ class xmlSchema {
     $this->xpath = new DOMXPath($dom);
   }
 
+  /**
+   * Initialize from xml.
+   * @param string $xml
+   */
   public function setFromXml($xml) {
     $dom = new DOMDocument();
     if (!@$dom->loadXML($xml) )
@@ -59,6 +86,11 @@ class xmlSchema {
     $this->xpath = new DOMXPath($dom);
   }
 
+  /**
+   * Get attributes from given element name.
+   * @param $element_name
+   * @return mixed
+   */
   public function getElementAttributes($element_name) {
     $element = helpFunc::split($element_name);
 
@@ -72,6 +104,11 @@ class xmlSchema {
     return $ret;
   }
 
+  /**
+   * Check if given element is simpleType
+   * @param $element_name
+   * @return bool
+   */
   public function isSimpleType($element_name) {
     $query = "//*[@name='" . $element_name . "']/@*";
     $nodes = $this->xpath->query($query);
@@ -102,6 +139,13 @@ class xmlSchema {
     return false;
   }
 
+  /**
+   * Get sequence for given element.
+   * @param $element_name
+   *  Name of the sequence
+   * @return array | Null
+   *  Sequence definition or NULL if not found
+   */
   public function getSequence($element_name) {
     $element = helpFunc::split($element_name);
 
@@ -116,6 +160,11 @@ class xmlSchema {
     return $ret;
   }
 
+  /**
+   * Get all namespaces.
+   * @return array
+   *  Namespaces in a array
+   */
   public function namespaces() {
     // get all namespaces
     $query = "//namespace::*";
@@ -132,52 +181,6 @@ class xmlSchema {
       $namespaces[$key] = $node->nodeValue;
     }
     return $namespaces;
-  }
-}
-class helpFunc {
-  /** Return true if given path starts with 'http(s)' */
-  public static function isUrl($path) {
-    $elements = parse_url($path);
-    //print_r($elements);
-    if (strtolower($elements['scheme']) == 'http' ||  strtolower($elements['scheme']) == 'https')
-      return true;
-    return false;
-  }
-
-  public static function split($string) {
-    if (strpos($string, ':') > 0) {
-      $split = explode(':', $string);
-      return $split[1];
-    }
-    return $string;
-  }
-
-  public static function getType($element) {
-    if (strpos($element, ':') > 0) {
-      $split = explode(':', $element);
-      return $split[0];
-    }
-    return false;
-  }
-
-  public static function soapHeaders($namespaces) {
-    $ret .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope"'."\n";
-    foreach ($namespaces as $prefix => $namespace) {
-      $ret .= 'xmlns:'.$prefix.'="'.$namespace."\"\n";
-    }
-    // remove last \n character
-    $ret = substr($ret, 0, -1);
-    $ret .= '>'."\n".'<SOAP-ENV:Body>'."\n";
-
-    return $ret;
-  }
-
-  public static function soapFooter() {
-    $ret .= '</SOAP-ENV:Body>'."\n";
-    $ret .= '</SOAP-ENV:Envelope>'."\n";
-
-
-    return $ret;
   }
 }
 

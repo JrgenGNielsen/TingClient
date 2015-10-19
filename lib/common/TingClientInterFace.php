@@ -6,7 +6,7 @@
  * of ting_client_ckass
  *
  */
-interface ItingClientInterFace{
+interface TingClientInterFace{
   /**
    * Plugin functionality if a webservice is added outside of the ting-client.
    * NOTICE class is NOT loaded automagically - it must be loaded elsewhere.

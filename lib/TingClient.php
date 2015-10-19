@@ -4,9 +4,10 @@ require_once 'ting_client_autoload.php';
 
 /**
  * @file Class TingClient
+ * Ting client defines an interface to usage of the TingClient library
  */
 
-class TingClient implements ItingClientInterFace{
+class TingClient implements TingClientInterFace{
   /**
    * @var TingClientLogger
    */
@@ -28,12 +29,20 @@ class TingClient implements ItingClientInterFace{
     return self::$requestFactory;
   }
 
-  public function __construct(ITingClientRequestCache $cacher = NULL,  TingClientLogger $logger = NULL) {
+  public function __construct(TingClientRequestCacheInterface $cacher = NULL,  TingClientLogger $logger = NULL) {
     $this->logger = (isset($logger)) ? $logger : new TingClientVoidLogger();
     $this->cacher = (isset($cacher)) ? $cacher : new TingClientCacher();
     self::$requestFactory = new TingClientRequestFactory();
   }
 
+  /**
+   * Execute a request.
+   *
+   * @param \TingClientRequest $request
+   * @return string
+   *  Response of request
+   * @throws \TingClientSoapException
+   */
   public function execute(TingClientRequest $request) {
     // check cache
     $cache_key = $request->cacheKey();
@@ -123,7 +132,7 @@ class TingClient implements ItingClientInterFace{
    * Set private member cacher
    * @param \ITingClientCacherInterface $cacher
    */
-  public function setCacher(ITingClientCacherInterface $cacher){
+  public function setCacher(TingClientCacherInterface $cacher){
     $this->cacher = $cacher;
   }
 
@@ -138,7 +147,7 @@ class TingClient implements ItingClientInterFace{
   /**
    * Get the client appropiate for handling given request.
    *
-   * @param \TingClientRequest $request
+   * @param \TingClientRequestInterface $request
    * @return \TingNanoClient|\TingSoapClient
    * @throws \TingClientSoapException
    */

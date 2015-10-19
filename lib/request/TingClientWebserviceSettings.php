@@ -27,7 +27,7 @@ class TingClientWebserviceSettings {
         'class' => 'TingCollectionRequest'
       ),
       'adhl' => array(
-        'class' => 'OpenAdhlRequest',
+        'class' => 'OpenAdhlRequestInterface',
         'url' => 'ting_recommendation_url',
         'xsd_url' => 'ting_recommendation_xsd',
       ),

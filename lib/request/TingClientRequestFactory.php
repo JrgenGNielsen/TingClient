@@ -1,7 +1,18 @@
 <?php
 
+/**
+ * @file
+ * Class TingClientRequestFactory
+ *
+ * Handle retrieval of requests.
+ */
+
 class TingClientRequestFactory {
 
+  /**
+   * @var array urls.
+   *  Settings for the requests
+   */
   public $urls;
 
   public function __construct() {
@@ -30,9 +41,9 @@ class TingClientRequestFactory {
   /**
    * Return object($className) if it exists and url is set, else throw TingClientException
    *
-   * @className,
-   *  the class implementing the request
-   * @name,
+   * @param params
+   *  parameters for the request
+   * @param name,
    *  the name of the request (for mapping in $urls variable)
    *
    **/
@@ -60,7 +71,8 @@ class TingClientRequestFactory {
   /**
    * Get a webservice definition
    * @param $name
-   * @return mixed
+   * @return array
+   *  Webservice setttings for given name
    */
   public function getSettings($name){
     return $this->urls[$name];
@@ -68,7 +80,8 @@ class TingClientRequestFactory {
 
   /**
    * Get urls to xml schema definitions for webservices defined in factory
-   * @return array
+   * @return array xsdUrls
+   *  All xsdurls is factory
    */
   public function getXSDurls() {
     $xds_urls = array();
@@ -83,6 +96,7 @@ class TingClientRequestFactory {
   /**
    * Get all webservice definitions
    * @return array
+   *  Settings for webservices
    *
    */
   public function getUrls() {

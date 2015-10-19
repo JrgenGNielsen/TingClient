@@ -1,4 +1,7 @@
 <?php
+/**
+ * @file Register autoload (placement) of classes in TingClient
+ */
 
 spl_autoload_register(function ($class_name) {
 // define locations of classes

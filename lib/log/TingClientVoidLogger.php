@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @file
  * Dummy logger which does nothing
  */
 class TingClientVoidLogger extends TingClientLogger {

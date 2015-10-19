@@ -7,9 +7,8 @@
  * @see lib/adapter/TingClientRequestAdapter
  *
  */
-interface ITingSoapClientInterface{
+interface TingSoapClientInterface{
   /**
-   * /**
    * Make a SOAP request.
    *
    * @param string $action

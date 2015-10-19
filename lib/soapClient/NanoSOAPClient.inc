@@ -124,6 +124,11 @@ class NanoSOAPClient {
     return $response;
   }
 
+  /**
+   * Get curlinfo
+   * @return mixed
+   *  Curl info
+   */
   function getCurlInfo(){
     return $this->curl_info;
   }
@@ -219,6 +224,8 @@ class NanoSOAPClient {
 
   /**
    * Flatten parameter array.
+   * @return string.
+   *  array as xml.
    */
   function flattenArray($name, $array) {
     $elems = array();
@@ -237,6 +244,8 @@ class NanoSOAPClient {
 
   /**
    * Generate SOAP envelope.
+   * @return string.
+   *  Soap header
    */
   function generateSOAPenvelope() {
     $ns_string = '';
@@ -260,4 +269,4 @@ class NanoSOAPClient {
   }
 }
 
-class NanoSOAPcURLException extends Exception {}
+

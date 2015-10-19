@@ -1,5 +1,11 @@
 <?php
-class TingSoapClient implements ITingSoapClientInterface{
+
+/**
+ * Class TingSoapClient.
+ *
+ * Wraps php soapclient in a class.
+ */
+class TingSoapClient implements TingSoapClientInterface{
   private $soapClient;
   public $requestBodyString;
   // this is for integration with ting-client
@@ -8,6 +14,12 @@ class TingSoapClient implements ITingSoapClientInterface{
   // for test purpose
   public static $user_agent;
 
+  /**
+   * Constructor. Initialize soapclient.
+   * @param $request
+   * @param null $location
+   * @throws \SoapFault
+   */
   public function __construct($request, $location = NULL){
     // get uri of wsdl
     $wsdl = $request->getWsdlUrl();
@@ -39,7 +51,8 @@ class TingSoapClient implements ITingSoapClientInterface{
     }
   }
 
-  /** wrapper for execution of scoapclient.
+  /**
+   * Wrapper for execution of scoapclient.
    * this is for integration with ting-client
    * @param string $action; the method to execute
    * @param mixed $params; paramters for method
@@ -62,7 +75,8 @@ class TingSoapClient implements ITingSoapClientInterface{
     return $data;
   }
 
-  /** Return status for request
+  /**
+   * Return status for request
    * this is for integration with ting-client
    * @see tingClientRequestAdapter, @see contrib/nanosoap.inc
    *
@@ -72,7 +86,8 @@ class TingSoapClient implements ITingSoapClientInterface{
     return $this->curl_info;
   }
 
-  /** Set private member curl_info with given errorcode. If errorcode is not set
+  /**
+   * Set private member curl_info with given errorcode. If errorcode is not set
    *  it is assumed that the request has completed, and the curl_info is set
    *  from response headers.
    *
@@ -91,6 +106,7 @@ class TingSoapClient implements ITingSoapClientInterface{
   }
 
   /**
+   * Check errorcode in responseheader.
    * @param $headerstring string. Responsehader from soapclient
    * @return array
    */
