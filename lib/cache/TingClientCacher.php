@@ -4,20 +4,38 @@
  * @file Class TingClientCacher
  * Default implementation - override in extending methods
  */
-class TingClientCacher implements TingClientCacherInterface{
+class TingClientCacher implements TingClientCacherInterface {
 
+  /**
+   * @var array
+   */
   private static $cache = array();
-  public function __construct(){}
 
+  /**
+   * Get cached value
+   *
+   * @param $key
+   *
+   * @return bool
+   */
   function get($key) {
     return isset(self::$cache[$key]) ? self::$cache[$key] : FALSE;
   }
 
+  /**
+   * Set cache
+   *
+   * @param $key
+   * @param $value
+   */
   function set($key, $value) {
     self::$cache[$key] = $value;
   }
 
-  function clear(){
+  /**
+   * Clear cache
+   */
+  function clear() {
     self::$cache = array();
   }
 }

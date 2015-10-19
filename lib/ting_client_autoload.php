@@ -5,6 +5,8 @@
 
 spl_autoload_register(function ($class_name) {
 // define locations of classes
+  $path = dirname(__FILE__);
+  print $path;
 
   $dirs = array(
     'ting-client/',
@@ -24,7 +26,7 @@ spl_autoload_register(function ($class_name) {
       require_once($dir . $class_name . '.php');
       return;
     }
-    elseif(file_exists($dir . $class_name . '.inc')) {
+    elseif (file_exists($dir . $class_name . '.inc')) {
       require_once($dir . $class_name . '.inc');
       return;
     }

@@ -7,13 +7,13 @@
  * @see lib/adapter/TingClientRequestAdapter
  *
  */
-interface TingSoapClientInterface{
+interface TingSoapClientInterface {
   /**
    * Make a SOAP request.
    *
    * @param string $action
    *   The SOAP action to perform/call.
-   * @param array $parameters
+   * @param array  $parameters
    *   The parameters to send with the SOAP request.
    *
    * @return string
@@ -27,7 +27,7 @@ interface TingSoapClientInterface{
    *
    * @return array
    *  An array with status (as in curl_getinfo)
-   *  @see http://php.net/manual/en/function.curl-getinfo.php
+   * @see http://php.net/manual/en/function.curl-getinfo.php
    */
   public function getCurlInfo();
 }

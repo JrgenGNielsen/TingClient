@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @file
  * NanoSOAP class for simple interaction with SOAP webservices.
  */
-
 class NanoSOAPClient {
   const XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>';
   private static $USER_AGENT = 'NanoSOAP for Drupal';
@@ -77,7 +77,7 @@ class NanoSOAPClient {
    *   The HTTP method to use. One of "GET" or "POST".
    * @param string $body
    *   The request body, ie. the SOAP envelope for SOAP requests.
-   * @param array $headers
+   * @param array  $headers
    *   Array of headers to be sent with the request.
    *
    * @return string
@@ -126,10 +126,11 @@ class NanoSOAPClient {
 
   /**
    * Get curlinfo
+   *
    * @return mixed
    *  Curl info
    */
-  function getCurlInfo(){
+  function getCurlInfo() {
     return $this->curl_info;
   }
 
@@ -138,7 +139,7 @@ class NanoSOAPClient {
    *
    * @param string $action
    *   The SOAP action to perform.
-   * @param array $parameters
+   * @param array  $parameters
    *   The parameters to send with the SOAP request.
    *
    * @return string
@@ -176,7 +177,7 @@ class NanoSOAPClient {
    *
    * @param string $name
    *   The parameter name.
-   * @param mixed $value
+   * @param mixed  $value
    *   Value of the parameter as array or string-compatible.
    *
    * @return DOMElement
@@ -224,6 +225,7 @@ class NanoSOAPClient {
 
   /**
    * Flatten parameter array.
+   *
    * @return string.
    *  array as xml.
    */
@@ -244,6 +246,7 @@ class NanoSOAPClient {
 
   /**
    * Generate SOAP envelope.
+   *
    * @return string.
    *  Soap header
    */

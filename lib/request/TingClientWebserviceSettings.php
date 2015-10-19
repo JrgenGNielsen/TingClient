@@ -40,7 +40,7 @@ class TingClientWebserviceSettings {
     );
   }
 
-  public static function getDefaultUrls(){
+  public static function getDefaultUrls() {
     return array(
       'adhl' => array(
         'ting_recommendation_url' => 'http://lakiseks.dbc.dk/openadhl/3.0/',

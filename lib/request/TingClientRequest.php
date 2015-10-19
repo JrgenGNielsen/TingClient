@@ -5,7 +5,7 @@
  * Base class for requests. Extending methods must implement remaainder methods
  * of TingClientRequestCacheInterface and abstract method processResponse
  */
-abstract class TingClientRequest implements TingClientRequestCacheInterface{
+abstract class TingClientRequest implements TingClientRequestCacheInterface {
 
   /* suffixes to use for cache variables */
   const cache_lifetime = '_cache_lifetime';
@@ -15,26 +15,32 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
   private $trackingId;
 
   /**
-   * @var cachekey
+   * @var string
    */
   protected $cacheKey;
   /**
-   * @var namespace
+   * @var string
    */
   private $nameSpace;
   /**
-   * @var xsdNamespace
+   * @var array
    */
   private $xsdNameSpace;
   /**
-   * @var wsdlUrl
+   * @var string
    */
   private $wsdlUrl;
   /**
-   * @var array parameters
+   * @var array
    */
   protected $parameters = array();
 
+  /**
+   * Abstract function to be implemented by extending classes
+   * @param \stdClass $response
+   *
+   * @return mixed
+   */
   abstract public function processResponse(stdClass $response);
 
   public function __construct($wsdlUrl, $serviceName = NULL) {
@@ -44,10 +50,10 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
   /**
    * Make a cachekey based on request parameters
    *
-   * @param array $params
+   * @param array  $params
    * @param string $ret
    **/
-  private function make_cache_key($params, $ret='') {
+  private function make_cache_key($params, $ret = '') {
     foreach ($params as $key => $value) {
       // skip trackinId
       if ($key === 'trackingId') {
@@ -68,36 +74,41 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Set xsdNameSpace
+   *
    * @param array $value
    */
-  public function setXsdNameSpace(array $value){
+  public function setXsdNameSpace(array $value) {
     $this->xsdNameSpace = $value;
   }
 
   /**
    * Get xsdNameSpace
-   * @return bool|\xsdNamespace
+   *
+   * @return bool|array
    */
-  public function getXsdNameSpace(){
+  public function getXsdNameSpace() {
     return !empty($this->xsdNameSpace) ? $this->xsdNameSpace : FALSE;
   }
 
 
   /**
    * Get ClientType
+   *
    * @return string
    *
    */
-  public function getClientType(){
+  public function getClientType() {
     return 'NANO';
   }
 
   /**
    * Check response. Defaults to true. To be overridden en extending classes
+   *
    * @param $response
+   *
    * @return bool
    */
-  public function checkResponse($response){
+  public function checkResponse($response) {
     return TRUE;
   }
 
@@ -105,13 +116,16 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
    * Get cachebin
    * default implementation of TingClientRequestCacheInterface::cacheBin
    * extending request can implement this method if it wishes it's own bin
+   *
+   * @return string
    */
   public function cacheBin() {
     return 'cache_bibdk_webservices';
   }
 
 
-  /** default Implementation of TingClientRequestCacheInterface::cacheKey
+  /**
+   * Default Implementation of TingClientRequestCacheInterface::cacheKey
    *
    * @return string
    **/
@@ -123,14 +137,16 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Get wsdlUrl
+   *
    * @return \wsdlUrl
    */
-  public function getWsdlUrl(){
+  public function getWsdlUrl() {
     return $this->wsdlUrl;
   }
 
   /**
    * Get classname
+   *
    * @return string
    */
   public function getClassname() {
@@ -139,6 +155,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Set a parameter
+   *
    * @param $name
    * @param $value
    */
@@ -148,6 +165,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Unset a parameter
+   *
    * @param $name
    */
   public function unsetParameter($name) {
@@ -158,7 +176,9 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Get a parameter
+   *
    * @param $name
+   *
    * @return mixed
    */
   public function getParameter($name) {
@@ -167,6 +187,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Set all parameters
+   *
    * @param $array
    */
   public function setParameters($array) {
@@ -175,6 +196,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Get all parameters
+   *
    * @return array
    */
   public function getParameters() {
@@ -184,7 +206,9 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Check if response can be decoded
+   *
    * @param $responseString
+   *
    * @return mixed
    * @throws \TingClientException
    */
@@ -202,7 +226,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
     }
 
     if (!is_object($response)) {
-      throw new TingClientException('Unexpected JSON response: ' . var_export($response, true));
+      throw new TingClientException('Unexpected JSON response: ' . var_export($response, TRUE));
     }
 
     return $this->processResponse($response);
@@ -211,7 +235,9 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
   /**
    * Response from webservice is ALWAYS xml if validation fails
    * elemants <faultCode> and <faultString> will be present in that case
+   *
    * @param string $xml
+   *
    * @return mixed $faultstring if valid xml is given, NULL if not
    */
   public static function parseForFaultString($xml) {
@@ -225,7 +251,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
     $query = '//faultstring';
     $nodelist = $xpath->query($query);
-    if ( $nodelist->length < 1 ) {
+    if ($nodelist->length < 1) {
       return NULL;
     }
     return $nodelist->item(0)->nodeValue;
@@ -233,7 +259,9 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Get value of stdObject
+   *
    * @param $object
+   *
    * @return null|string
    * @throws \TingClientException
    */
@@ -247,6 +275,15 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
     }
   }
 
+  /**
+   * Get value of attribute
+   *
+   * @param $object
+   * @param $attributeName
+   *
+   * @return null|string
+   * @throws \TingClientException
+   */
   protected static function getAttributeValue($object, $attributeName) {
     $attribute = self::getAttribute($object, $attributeName);
     if (is_array($attribute)) {
@@ -260,8 +297,10 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
 
   /**
    * Get attribute from given object and attribute name
+   *
    * @param $object
    * @param $attributeName
+   *
    * @return null|string
    */
   protected static function getAttribute($object, $attributeName) {
@@ -270,14 +309,22 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface{
     return self::getBadgerFishValue($object, $attributeName);
   }
 
+  /**
+   * Get namespace
+   * @param $object
+   *
+   * @return null|string
+   */
   protected static function getNamespace($object) {
     return self::getBadgerFishValue($object, '@');
   }
 
   /**
    * Get value from given valueName
+   *
    * @param $badgerFishObject
    * @param $valueName
+   *
    * @return null|string
    */
   protected static function getBadgerFishValue($badgerFishObject, $valueName) {

@@ -6,15 +6,14 @@ require_once 'ting_client_autoload.php';
  * @file Class TingClient
  * Ting client defines an interface to usage of the TingClient library
  */
-
-class TingClient implements TingClientInterFace{
+class TingClient implements TingClientInterFace {
   /**
    * @var TingClientLogger
    */
   private $logger;
 
   /*
-   * $var $cacher
+   * $var TingClientCacherinterface
    */
   private $cacher;
 
@@ -25,20 +24,30 @@ class TingClient implements TingClientInterFace{
    *  instance of private memeber request_factory
    */
   private static $requestFactory;
-  public function requestFactory() {
+
+  public function getRequestFactory() {
     return self::$requestFactory;
   }
 
-  public function __construct(TingClientRequestCacheInterface $cacher = NULL,  TingClientLogger $logger = NULL) {
+  /**
+   * Constructor
+   *
+   * @param \TingClientRequestCacheInterface|NULL $cacher
+   * @param \TingClientLogger|NULL                $logger
+   */
+  public function __construct(TingClientRequestCacheInterface $cacher = NULL, TingClientLogger $logger = NULL) {
     $this->logger = (isset($logger)) ? $logger : new TingClientVoidLogger();
     $this->cacher = (isset($cacher)) ? $cacher : new TingClientCacher();
     self::$requestFactory = new TingClientRequestFactory();
+
+    print __FILE__;
   }
 
   /**
    * Execute a request.
    *
    * @param \TingClientRequest $request
+   *
    * @return string
    *  Response of request
    * @throws \TingClientSoapException
@@ -46,7 +55,7 @@ class TingClient implements TingClientInterFace{
   public function execute(TingClientRequest $request) {
     // check cache
     $cache_key = $request->cacheKey();
-    if($this->cacher->get($cache_key)){
+    if ($this->cacher->get($cache_key)) {
       return $this->cacher->get($cache_key);
     }
 
@@ -67,25 +76,27 @@ class TingClient implements TingClientInterFace{
   /**
    * Do a named request.
    *
-   * @param string $requestName
+   * @param string    $requestName
    *  Name of the request as set in requestfactory
-   * @param array $params
+   * @param array     $params
    *  Parameters for the request
    * @param bool|TRUE $cache_me
    *  Override other cache settings if needed
+   *
    * @return mixed
    *  response from webservice
    */
   public function doRequest($requestName, $params, $cache_me = TRUE) {
     $this->sanitizeWebservices();
-    $request = $this->requestFactory()->getNamedRequest($requestName, $params);
+    $request = $this->getRequestFactory()
+      ->getNamedRequest($requestName, $params);
     $result = $this->execute($request);
 
     return $result;
   }
 
   /**
-   * Add weservices to requestfactory. @see lib/request/TingClientRequestFactory
+   * Add webservices to requestfactory. @see lib/request/TingClientRequestFactory
    *
    * @param $webservice_settings
    *  Array describing the webservice eg.
@@ -104,7 +115,7 @@ class TingClient implements TingClientInterFace{
    *
    * */
   public function addToRequestFactory($webservice_settings = array()) {
-    $this->requestFactory()->add_to_urls($webservice_settings);
+    $this->getRequestFactory()->add_to_urls($webservice_settings);
   }
 
   /**
@@ -112,35 +123,37 @@ class TingClient implements TingClientInterFace{
    *
    * @param array $url_values of the type
    *  [placeholder => realurl]  eg.:
-   *  array('search' => array('ting_search_url' => 'http://opensearch.addi.dk/4.0.1)/',
-   *        ('   )
+   *  array('search' => array('ting_search_url' => 'http://opensearch.addi.dk/4.0.1/')),
+   *
    */
   public function sanitizeWebservices($real_urls = array()) {
     $url_variables = $real_urls;
     // merge in default urls
     $url_variables += TingClientWebserviceSettings::getDefaultUrls();
-    foreach ( $url_variables as $name=>$url ) {
-      if ( !$url ) {
-        throw new Exception( 'ting-client: Webservice URL is not defined for ' . $name);
+    foreach ($url_variables as $name => $url) {
+      if (!$url) {
+        throw new Exception('ting-client: Webservice URL is not defined for ' . $name);
       }
-      $this->requestFactory()->set_real_urls($name, $url);
+      $this->getRequestFactory()->set_real_urls($name, $url);
     }
   }
 
 
   /**
    * Set private member cacher
+   *
    * @param \ITingClientCacherInterface $cacher
    */
-  public function setCacher(TingClientCacherInterface $cacher){
+  public function setCacher(TingClientCacherInterface $cacher) {
     $this->cacher = $cacher;
   }
 
   /**
    * Set private member logger
+   *
    * @param \TingClientLogger $logger
    */
-  public function setLogger(TingClientLogger $logger){
+  public function setLogger(TingClientLogger $logger) {
     $this->logger = $logger;
   }
 
@@ -148,15 +161,16 @@ class TingClient implements TingClientInterFace{
    * Get the client appropiate for handling given request.
    *
    * @param \TingClientRequestInterface $request
+   *
    * @return \TingNanoClient|\TingSoapClient
    * @throws \TingClientSoapException
    */
-  private function getSoapClient(TingClientRequest $request){
-    switch($request->getClientType()){
+  private function getSoapClient(TingClientRequest $request) {
+    switch ($request->getClientType()) {
       case 'NANO':
         $options = array('namespaces' => $request->getXsdNameSpace());
         return new TingNanoClient($request->getWsdlUrl(), $options);
-      case 'SOAPCLIENT' ;
+      case 'SOAPCLIENT';
         return new TingSoapClient($request);
       default:
         $class_name = get_class($request);

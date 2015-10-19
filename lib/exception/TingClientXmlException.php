@@ -5,6 +5,6 @@
  * Class TingClientXmlException
  * Named exception
  */
-class TingClientXmlException extends Exception{
+class TingClientXmlException extends Exception {
 
 }

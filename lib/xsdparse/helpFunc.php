@@ -7,8 +7,10 @@
 class helpFunc {
   /**
    * Chek if given path is an url.
+   *
    * @param $path
    *  The path to check
+   *
    * @return bool
    *  Whether path is an url or not
    */
@@ -23,8 +25,10 @@ class helpFunc {
 
   /**
    * Split a string by ':' eg. ors:checkElectronicDeliveryRequest
+   *
    * @param $string
    *  The string to split
+   *
    * @return string
    *  Value without the namespace part
    */
@@ -38,8 +42,10 @@ class helpFunc {
 
   /**
    * Split a string by ':' eg.  ors:checkElectronicDeliveryRequest
+   *
    * @param string $element
    *  The string to split
+   *
    * @return bool | string
    *  Type (namespace) of the string
    */
@@ -53,8 +59,10 @@ class helpFunc {
 
   /**
    * Get soapheader for the request
+   *
    * @param $namespaces
    *  The namespaces in the header
+   *
    * @return string
    *  Soapheader
    */
@@ -72,6 +80,7 @@ class helpFunc {
 
   /**
    * Get a soapfooter
+   *
    * @return string
    */
   public static function soapFooter() {

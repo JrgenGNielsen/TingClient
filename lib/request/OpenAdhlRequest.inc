@@ -4,7 +4,6 @@
  * @file
  * OpenAdhlRequest class
  **/
-
 class OpenAdhlRequestInterface extends TingClientRequest Implements TingClientRequestCacheInterface {
 
   /**
@@ -23,7 +22,7 @@ class OpenAdhlRequestInterface extends TingClientRequest Implements TingClientRe
   /**
    * Make a cachekey based on request parameters
    *
-   * @param array $params
+   * @param array  $params
    * @param string $ret
    **/
   private function make_cache_key($params, &$ret) {
@@ -70,7 +69,9 @@ class OpenAdhlRequestInterface extends TingClientRequest Implements TingClientRe
 
   /**
    * Implementation of abstract method processResponse
+   *
    * @param \stdClass $result
+   *
    * @return \stdClass
    */
   public function processResponse(stdClass $result) {

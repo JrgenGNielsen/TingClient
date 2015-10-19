@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @file
  * Base logger class which can be injected into the Ting client.
  */
 abstract class TingClientLogger {
@@ -14,10 +15,19 @@ abstract class TingClientLogger {
   const INFO = 'INFO';
   const DEBUG = 'DEBUG';
 
-  static public $levels = array(self::EMERGENCY, self::ALERT, self::CRITICAL, self::ERROR,
-                                self::WARNING,  self::NOTICE, self::INFO, self::DEBUG);
+  static public $levels = array(
+    self::EMERGENCY,
+    self::ALERT,
+    self::CRITICAL,
+    self::ERROR,
+    self::WARNING,
+    self::NOTICE,
+    self::INFO,
+    self::DEBUG
+  );
 
   public $log_time = 0;
+
   /**
    * Log a message.
    *
@@ -26,17 +36,17 @@ abstract class TingClientLogger {
    */
   public function log($message, $variables, $severity = self::INFO) {
     if (!in_array($severity, self::$levels)) {
-      throw new TingClientException('Unsupported severity: '.$severity);
+      throw new TingClientException('Unsupported severity: ' . $severity);
     }
     $this->doLog($message, $variables, $severity);
   }
 
-  public function startTime(){
+  public function startTime() {
     $time = explode(' ', microtime());
-    $this->log_time = - ($time[1] + $time[0]);
+    $this->log_time = -($time[1] + $time[0]);
   }
 
-  public function stopTime(){
+  public function stopTime() {
     $time = explode(' ', microtime());
     $this->log_time += $time[1] + $time[0];
   }

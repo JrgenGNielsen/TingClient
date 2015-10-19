@@ -178,9 +178,9 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
     $tingClass->sanitizeWebservices($real_urls);
 
     $this->assertTrue($tingClass
-        ->requestFactory()->urls['forsrights']['url'] == $url, 'url was sanitized');
+        ->getRequestFactory()->urls['forsrights']['url'] == $url, 'url was sanitized');
     $this->assertTrue($tingClass
-        ->requestFactory()->urls['forsrights']['xsd_url'] == $xsd_url, 'xsd url was sanitized');
+        ->getRequestFactory()->urls['forsrights']['xsd_url'] == $xsd_url, 'xsd url was sanitized');
 
     // assert that parameters are ordered by given xsd
     $params = array(
@@ -191,7 +191,7 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
       'outputType' => 'json',
     );
     $request1 = $tingClass
-      ->requestFactory()
+      ->getRequestFactory()
       ->getNamedRequest('forsrights', $params);
 
     $params = array(
@@ -202,7 +202,7 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
       'outputType' => 'json',
     );
     $request2 = $tingClass
-      ->requestFactory()
+      ->getRequestFactory()
       ->getNamedRequest('forsrights', $params);
 
     $this->assertEquals($request1->getParameters(), $request2->getParameters(), 'parameters was reorganized according to xsd');

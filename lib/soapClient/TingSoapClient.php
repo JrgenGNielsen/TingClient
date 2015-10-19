@@ -5,7 +5,7 @@
  *
  * Wraps php soapclient in a class.
  */
-class TingSoapClient implements TingSoapClientInterface{
+class TingSoapClient implements TingSoapClientInterface {
   private $soapClient;
   public $requestBodyString;
   // this is for integration with ting-client
@@ -16,53 +16,56 @@ class TingSoapClient implements TingSoapClientInterface{
 
   /**
    * Constructor. Initialize soapclient.
-   * @param $request
+   *
+   * @param      $request
    * @param null $location
+   *
    * @throws \SoapFault
    */
-  public function __construct($request, $location = NULL){
+  public function __construct($request, $location = NULL) {
     // get uri of wsdl
     $wsdl = $request->getWsdlUrl();
     // soapClient is set with trace and exception options to enable proper exceptionhandling and logging
     $options = array(
       'trace' => 1,
-      'exceptions'=> 1,
-      'soap_version'=> SOAP_1_1,
+      'exceptions' => 1,
+      'soap_version' => SOAP_1_1,
       'cache_wsdl' => WSDL_CACHE_NONE,
     );
 
-    if(isset(self::$user_agent)){
-      $options += array('user_agent'=>self::$user_agent);
+    if (isset(self::$user_agent)) {
+      $options += array('user_agent' => self::$user_agent);
     }
 
-    if(!empty($location)) {
-      $options += array('location'=>$location);
+    if (!empty($location)) {
+      $options += array('location' => $location);
     }
     // xdebug causes a fatal error before soapclient handles error in constructor
     // disable it. it shouldn't be in production anyways
-    if(function_exists('xdebug_disable')){
+    if (function_exists('xdebug_disable')) {
       xdebug_disable();
     }
     // constructor causes an php i/o warning on failure. suppress it (@)
-    $this->soapClient = @new SoapClient($wsdl,$options);
+    $this->soapClient = @new SoapClient($wsdl, $options);
 
-    if(!is_object($this->soapClient) || is_soap_fault($this->soapClient)){
-      throw new SoapFault('500','SoapClientFault:Failed to construct. WSDL location is:'.$wsdl);
+    if (!is_object($this->soapClient) || is_soap_fault($this->soapClient)) {
+      throw new SoapFault('500', 'SoapClientFault:Failed to construct. WSDL location is:' . $wsdl);
     }
   }
 
   /**
    * Wrapper for execution of scoapclient.
    * this is for integration with ting-client
-   * @param string $action; the method to execute
-   * @param mixed $params; paramters for method
+   *
+   * @param string $action ; the method to execute
+   * @param mixed  $params ; paramters for method
+   *
    * @return mixed bool | stdClass
    */
-  public function call($action, $params){
-    try{
+  public function call($action, $params) {
+    try {
       $data = $this->soapClient->$action($params);
-    }
-    catch(Exception $e){
+    } catch (Exception $e) {
       // set status code to 400 (bad request)
       $this->setCurlInfo('400');
       return FALSE;
@@ -78,11 +81,12 @@ class TingSoapClient implements TingSoapClientInterface{
   /**
    * Return status for request
    * this is for integration with ting-client
+   *
    * @see tingClientRequestAdapter, @see contrib/nanosoap.inc
    *
    * return private member curl_info
    */
-  public function getCurlInfo(){
+  public function getCurlInfo() {
     return $this->curl_info;
   }
 
@@ -95,9 +99,9 @@ class TingSoapClient implements TingSoapClientInterface{
    *
    * @param int null $errorcode;
    */
-  private function setCurlInfo($errorcode = NULL){
-    if(!empty($errorcode)){
-      $this->curl_info = array('http_code'=>$errorcode);
+  private function setCurlInfo($errorcode = NULL) {
+    if (!empty($errorcode)) {
+      $this->curl_info = array('http_code' => $errorcode);
       return;
     }
     $responseHeaders = $this->soapClient->__getLastResponseHeaders();
@@ -107,12 +111,14 @@ class TingSoapClient implements TingSoapClientInterface{
 
   /**
    * Check errorcode in responseheader.
+   *
    * @param $headerstring string. Responsehader from soapclient
+   *
    * @return array
    */
-  private function parseResponseHeader($headerstring){
-    if(strpos($headerstring,'HTTP/1.1 200 OK')!==FALSE){
-      return array('http_code'=>'200');
+  private function parseResponseHeader($headerstring) {
+    if (strpos($headerstring, 'HTTP/1.1 200 OK') !== FALSE) {
+      return array('http_code' => '200');
     }
     // status code MUST be 200
     return array('http_code' => '500');

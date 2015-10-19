@@ -13,21 +13,21 @@
  * $definition = $schema -> getSequenceArray ('checkElectronicDeliveryRequest')
  *
  */
-
-
 class xmlSchema {
   /**
    * @var DOMXPath xpath;
    */
   public $xpath;
 
-  public function __construct()
-  { }
+  public function __construct() {
+  }
 
   /**
    * Get an array describing an element
-   * @param $element_name;
+   *
+   * @param $element_name ;
    *  Name of the element
+   *
    * @return array | NULL
    *  Elementdefinition or NULL if element was not found
    */
@@ -47,17 +47,19 @@ class xmlSchema {
 
   /**
    * Load xsd from file.
+   *
    * @param string $filename
+   *
    * @throws \Exception
    */
   public function getFromFile($filename) {
     $dom = new DOMDocument();
-    if ( !@$dom->load($filename) ) {
+    if (!@$dom->load($filename)) {
       // try to download XSDs from URLs
       $client = new ting_client_class();
       $XSDurls = $client->getXSDurls();
       // try to read file again
-      if ( !@$dom->load($filename) ) {
+      if (!@$dom->load($filename)) {
         throw new Exception('ting-client: could not open file: ' . $filename);
       }
     }
@@ -66,29 +68,35 @@ class xmlSchema {
 
   /**
    * Load xsd from url.
+   *
    * @param string $filename
    */
   public function getFromUrl($filename) {
     $dom = new DOMDocument();
-    if (! @$dom->load($filename))
-      die("could not open file: ".$filename."\n" );
+    if (!@$dom->load($filename)) {
+      die("could not open file: " . $filename . "\n");
+    }
     $this->xpath = new DOMXPath($dom);
   }
 
   /**
    * Initialize from xml.
+   *
    * @param string $xml
    */
   public function setFromXml($xml) {
     $dom = new DOMDocument();
-    if (!@$dom->loadXML($xml) )
+    if (!@$dom->loadXML($xml)) {
       die("could not load xml");
+    }
     $this->xpath = new DOMXPath($dom);
   }
 
   /**
    * Get attributes from given element name.
+   *
    * @param $element_name
+   *
    * @return mixed
    */
   public function getElementAttributes($element_name) {
@@ -106,7 +114,9 @@ class xmlSchema {
 
   /**
    * Check if given element is simpleType
+   *
    * @param $element_name
+   *
    * @return bool
    */
   public function isSimpleType($element_name) {
@@ -123,26 +133,30 @@ class xmlSchema {
       //check if simpleType is inline
       $query = "//*[@name='" . $element_name . "']/*[local-name()='simpleType']";
       $nodes = $this->xpath->query($query);
-      if ($nodes->length > 0)
-        return true;
+      if ($nodes->length > 0) {
+        return TRUE;
+      }
 
-      return false;
+      return FALSE;
     }
 
     $typename = helpFunc::split($type);
-    $query = "//*[local-name()='simpleType'][@name='" . $typename."']";
+    $query = "//*[local-name()='simpleType'][@name='" . $typename . "']";
 
     $nodes = $this->xpath->query($query);
-    if ($nodes->length > 0)
-      return true;
+    if ($nodes->length > 0) {
+      return TRUE;
+    }
 
-    return false;
+    return FALSE;
   }
 
   /**
    * Get sequence for given element.
+   *
    * @param $element_name
    *  Name of the sequence
+   *
    * @return array | Null
    *  Sequence definition or NULL if not found
    */
@@ -152,8 +166,9 @@ class xmlSchema {
     $query = "//*[@name='" . $element . "']//*[local-name()='element']/@*";
     $nodes = $this->xpath->query($query);
     foreach ($nodes as $node) {
-      if ($node->nodeName == "ref" || $node->nodeName == "type")
+      if ($node->nodeName == "ref" || $node->nodeName == "type") {
         $ret[] = $node->nodeValue;
+      }
     }
 
 
@@ -162,6 +177,7 @@ class xmlSchema {
 
   /**
    * Get all namespaces.
+   *
    * @return array
    *  Namespaces in a array
    */
@@ -173,10 +189,12 @@ class xmlSchema {
     $namespaces = array();
     foreach ($nodelist as $node) {
       // remove 'xlmns:'
-      if ($index = strpos($node->nodeName, ':'))
+      if ($index = strpos($node->nodeName, ':')) {
         $key = substr($node->nodeName, $index + 1);
-      else
+      }
+      else {
         $key = $node->nodeName;
+      }
 
       $namespaces[$key] = $node->nodeValue;
     }

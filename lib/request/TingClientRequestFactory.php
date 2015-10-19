@@ -6,7 +6,6 @@
  *
  * Handle retrieval of requests.
  */
-
 class TingClientRequestFactory {
 
   /**
@@ -22,6 +21,7 @@ class TingClientRequestFactory {
 
   /**
    * Add given urls (webservice definitions).
+   *
    * @param array $urls
    *  array of webservice settings of the form:
    *
@@ -43,7 +43,7 @@ class TingClientRequestFactory {
    *
    * @param params
    *  parameters for the request
-   * @param name,
+   * @param name ,
    *  the name of the request (for mapping in $urls variable)
    *
    **/
@@ -70,16 +70,19 @@ class TingClientRequestFactory {
 
   /**
    * Get a webservice definition
+   *
    * @param $name
+   *
    * @return array
    *  Webservice setttings for given name
    */
-  public function getSettings($name){
+  public function getSettings($name) {
     return $this->urls[$name];
   }
 
   /**
    * Get urls to xml schema definitions for webservices defined in factory
+   *
    * @return array xsdUrls
    *  All xsdurls is factory
    */
@@ -95,6 +98,7 @@ class TingClientRequestFactory {
 
   /**
    * Get all webservice definitions
+   *
    * @return array
    *  Settings for webservices
    *
@@ -105,18 +109,19 @@ class TingClientRequestFactory {
 
   /**
    * Replace placeholders in webservice definitions with the real url's
+   *
    * @param string $name .
    *  The name of the webservice.
-   * @param array $url_variables .
+   * @param array  $url_variables .
    *  the real urls to replace with.
    */
   public function set_real_urls($name, array $url_variables) {
     $settings = $this->urls[$name];
     foreach ($settings as $key => $placeholder) {
-      if(is_array($placeholder)){
+      if (is_array($placeholder)) {
         continue;
       }
-      if(isset($url_variables[$placeholder])){
+      if (isset($url_variables[$placeholder])) {
         $this->urls[$name][$key] = $url_variables[$placeholder];
       }
     }

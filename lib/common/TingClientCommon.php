@@ -10,6 +10,7 @@ class TingClientCommon {
    *
    * @param string $xml
    *  The xml to validate
+   *
    * @return bool
    *  Whether string is valid xml or not
    */
@@ -25,6 +26,7 @@ class TingClientCommon {
    * Convert an url to a filename [http://openadhl.addi.dk/1.1/adhl.xsd -> openadhl-addi-dk-1-1-adhl-xsd]
    *
    * @param $url
+   *
    * @return string
    */
   public static function urlToFilename($url) {
@@ -40,6 +42,7 @@ class TingClientCommon {
 
   /**
    * Check if xsd_url is set. If not get it from given url and store it in tmp dir for later use
+   *
    * @param string $check_data
    *  Url to the xsd
    *
@@ -59,7 +62,7 @@ class TingClientCommon {
       if (self::validateXml($file)) {
         file_put_contents($dir . '/' . $filename, $file);
       }
-      else{
+      else {
         return $params;
       }
     }
@@ -68,20 +71,45 @@ class TingClientCommon {
   }
 
 
-  private static function validateXsd($path, $params){
-     $schema = new xmlSchema();
-     $schema->getFromFile($path);
+  /**
+   * Get the sequence given in params['action'] from schemadefinition.
+   *
+   * Validate (rearrange) given other parameters to follow the order given in
+   * the sequence
+   *
+   * @param $path
+   * @param $params
+   *
+   * @return array
+   * @throws \Exception
+   */
+  private static function validateXsd($path, $params) {
+    $schema = new xmlSchema();
+    $schema->getFromFile($path);
 
-     $seq = $schema->getSequence($params['action']);
-     $arr[] = 'action';
-     foreach ($seq as $element) {
-       $s = $schema->getElementAttributes($element);
-       $arr[] = $s['name'];
-     }
+    $seq = $schema->getSequence($params['action']);
+    $arr[] = 'action';
+    foreach ($seq as $element) {
+      $s = $schema->getElementAttributes($element);
+      $arr[] = $s['name'];
+    }
 
-     return self::checkParameters($arr, $params);
+    return self::checkParameters($arr, $params);
   }
-  private static function checkParameters($real_params, $params){
+
+
+  /**
+   * Rearrange parameters.
+   *
+   * @param array $real_params
+   *  parameters from schemadefinition
+   * @param array $params
+   *  parameter from the request
+   *
+   * @return array
+   *  parameters in the correct order
+   */
+  private static function checkParameters($real_params, $params) {
     $parsed_params = array();
     foreach ($real_params as $real_param) {
       if (!empty($params[$real_param])) {

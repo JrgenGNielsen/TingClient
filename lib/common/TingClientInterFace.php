@@ -6,7 +6,8 @@
  * of ting_client_ckass
  *
  */
-interface TingClientInterFace{
+
+interface TingClientInterFace {
   /**
    * Plugin functionality if a webservice is added outside of the ting-client.
    * NOTICE class is NOT loaded automagically - it must be loaded elsewhere.
@@ -22,7 +23,7 @@ interface TingClientInterFace{
    *
    *  $ret['forsrights']['class'] = 'bibdk_forsrights';
    *  $ret['forsrights']['url'] = 'bibdk_forsrights_url';
-   *  $ret['forsrights']['xsdNamespace'] = array(0=>'http://oss.dbc.dk/ns/forsrights');
+   *  $ret['forsrights']['xsdNamespace'] = array(0 => 'http://oss.dbc.dk/ns/forsrights');
    *  $ret['forsrights']['custom_parse'] = bibdk_forsrights_parse_response
    *
    *  class and url are mandatory.
@@ -33,12 +34,14 @@ interface TingClientInterFace{
 
   /**
    * Do a named request.
-   * @param string $requestName
+   *
+   * @param string    $requestName
    *  Name of the request as set in requestfactory
-   * @param array $params
+   * @param array     $params
    *  Parameters for the request
    * @param bool|TRUE $cache_me
    *  Override other cache settings if needed
+   *
    * @return mixed
    *  response from webservice
    */
