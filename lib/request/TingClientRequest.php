@@ -8,8 +8,8 @@
 abstract class TingClientRequest implements TingClientRequestCacheInterface {
 
   /* suffixes to use for cache variables */
-  const cacheLifetime = '_cache_lifetime';
-  const cacheEnable = '_cache_enable';
+  const CACHELIFETIME = '_cache_lifetime';
+  const CACHEENABLE = '_cache_enable';
 
   // for tracing the request
   private $trackingId;
