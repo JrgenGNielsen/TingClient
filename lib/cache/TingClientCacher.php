@@ -14,7 +14,7 @@ class TingClientCacher implements TingClientCacherInterface {
   /**
    * Get cached value
    *
-   * @param $string
+   * @param string $key
    *
    * @return bool
    */
@@ -25,8 +25,8 @@ class TingClientCacher implements TingClientCacherInterface {
   /**
    * Set cache
    *
-   * @param $string
-   * @param $string
+   * @param string $key
+   * @param mixed $value
    */
   function set($key, $value) {
     self::$cache[$key] = $value;
