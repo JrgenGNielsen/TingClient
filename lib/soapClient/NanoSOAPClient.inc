@@ -6,7 +6,7 @@
  */
 class NanoSOAPClient {
   const XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>';
-  private static $USER_AGENT = 'NanoSOAP for Drupal';
+  const USER_AGENT = 'NanoSOAP for Drupal';
 
   /**
    * SOAP endpoint, the URL to call SOAP requests on.
@@ -46,17 +46,6 @@ class NanoSOAPClient {
       $this->namespaces = array('SOAP-ENV' => 'http://schemas.xmlsoap.org/soap/envelope/');
     }
   }
-
-  /**
-   * Changes the user agent string
-   *
-   * @param string $user_agent
-   *   New value for the user agent string.
-   */
-  public static function setUserAgent($user_agent = 'NanoSOAP for Drupal') {
-    self::$USER_AGENT = $user_agent;
-  }
-
   /**
    * Gets the user agent string
    *
@@ -64,7 +53,7 @@ class NanoSOAPClient {
    *   Value of the user agent string.
    */
   public static function getUserAgent() {
-    return self::$USER_AGENT;
+    return self::USER_AGENT;
   }
 
   /**
@@ -90,7 +79,7 @@ class NanoSOAPClient {
     // details on what options are available.
     $curl_options = array(
       CURLOPT_URL => $url,
-      CURLOPT_USERAGENT => self::$USER_AGENT,
+      CURLOPT_USERAGENT => self::USER_AGENT,
       CURLOPT_RETURNTRANSFER => TRUE,
     );
 
