@@ -8,8 +8,8 @@
 abstract class TingClientRequest implements TingClientRequestCacheInterface {
 
   /* suffixes to use for cache variables */
-  const cache_lifetime = '_cache_lifetime';
-  const cache_enable = '_cache_enable';
+  const cacheLifetime = '_cache_lifetime';
+  const cacheEnable = '_cache_enable';
 
   // for tracing the request
   private $trackingId;
@@ -156,8 +156,8 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Set a parameter
    *
-   * @param $name
-   * @param $value
+   * @param string $name
+   * @param mixed $value
    */
   public function setParameter($name, $value) {
     $this->parameters[$name] = $value;
@@ -166,7 +166,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Unset a parameter
    *
-   * @param $name
+   * @param string $name
    */
   public function unsetParameter($name) {
     if (isset($this->parameters[$name])) {
@@ -177,7 +177,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Get a parameter
    *
-   * @param $name
+   * @param string $name
    *
    * @return mixed
    */
@@ -188,7 +188,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Set all parameters
    *
-   * @param $array
+   * @param array $array
    */
   public function setParameters($array) {
     $this->parameters = $array;
@@ -207,7 +207,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Check if response can be decoded
    *
-   * @param $responseString
+   * @param string $responseString
    *
    * @return mixed
    * @throws \TingClientException
@@ -260,7 +260,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Get value of stdObject
    *
-   * @param $object
+   * @param stdClass $object
    *
    * @return null|string
    * @throws \TingClientException
@@ -278,8 +278,8 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Get value of attribute
    *
-   * @param $object
-   * @param $attributeName
+   * @param stdClass $object
+   * @param string $attributeName
    *
    * @return null|string
    * @throws \TingClientException
@@ -298,8 +298,8 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Get attribute from given object and attribute name
    *
-   * @param $object
-   * @param $attributeName
+   * @param stdClass $object
+   * @param string $attributeName
    *
    * @return null|string
    */
@@ -322,8 +322,8 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   /**
    * Get value from given valueName
    *
-   * @param $badgerFishObject
-   * @param $valueName
+   * @param stdClass $badgerFishObject
+   * @param string $valueName
    *
    * @return null|string
    */

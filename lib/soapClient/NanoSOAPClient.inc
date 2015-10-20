@@ -33,7 +33,9 @@ class NanoSOAPClient {
   public $requestBodyString;
 
   /**
-   * Construct the SOAP client, using the specified options.
+   * Construct the SOAP client, using the specified options
+   * @param string $endpoint
+   * @param array  $options
    */
   function __construct($endpoint, $options = array()) {
     $this->endpoint = $endpoint;
@@ -226,8 +228,8 @@ class NanoSOAPClient {
   /**
    * Flatten parameter array.
    *
-   * @return string.
-   *  array as xml.
+   * @return array.
+   *  xml elements as array.
    */
   function flattenArray($name, $array) {
     $elems = array();

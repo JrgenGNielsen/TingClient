@@ -5,20 +5,17 @@
 
 spl_autoload_register(function ($class_name) {
 // define locations of classes
-  $path = dirname(__FILE__);
-  print $path;
-
+  $path = __DIR__;
   $dirs = array(
-    'ting-client/',
-    'lib/',
-    'lib/cache/',
-    'lib/request/',
-    'lib/exception/',
-    'lib/log/',
-    'lib/result/',
-    'lib/soapClient/',
-    'lib/xsdparse/',
-    'lib/common/'
+    $path . '/cache/',
+    $path . '/request/',
+    $path . '/exception/',
+    $path . '/adapter/',
+    $path . '/log/',
+    $path . '/result/',
+    $path . '/soapClient/',
+    $path . '/xsdparse/',
+    $path . '/common/'
   );
 
   foreach ($dirs as $dir) {

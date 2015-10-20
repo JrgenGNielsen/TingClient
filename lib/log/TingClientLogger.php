@@ -32,7 +32,9 @@ abstract class TingClientLogger {
    * Log a message.
    *
    * @param string $message The message to log
+   * @param array $variables
    * @param string $severity The severity of the message
+   *
    */
   public function log($message, $variables, $severity = self::INFO) {
     if (!in_array($severity, self::$levels)) {
@@ -41,11 +43,17 @@ abstract class TingClientLogger {
     $this->doLog($message, $variables, $severity);
   }
 
+  /**
+   * Log start time
+   */
   public function startTime() {
     $time = explode(' ', microtime());
     $this->log_time = -($time[1] + $time[0]);
   }
 
+  /**
+   * Log stop time
+   */
   public function stopTime() {
     $time = explode(' ', microtime());
     $this->log_time += $time[1] + $time[0];

@@ -27,7 +27,7 @@ class TingClientWebserviceSettings {
         'class' => 'TingCollectionRequest'
       ),
       'adhl' => array(
-        'class' => 'OpenAdhlRequestInterface',
+        'class' => 'OpenAdhlRequest',
         'url' => 'ting_recommendation_url',
         'xsd_url' => 'ting_recommendation_xsd',
       ),
@@ -46,10 +46,6 @@ class TingClientWebserviceSettings {
         'ting_recommendation_url' => 'http://lakiseks.dbc.dk/openadhl/3.0/',
         'ting_recommendation_xsd' => 'http://openadhl.addi.dk/1.1/adhl.xsd',
       ),
-      'forsrights' => array(
-        'bibdk_forsrights_url' => 'http://forsrights.addi.dk/1.2/',
-        'bibdk_forsrights_xsd' => 'http://forsrights.addi.dk/1.2/forsrights.xsd',
-      )
     );
   }
 }

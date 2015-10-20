@@ -9,17 +9,16 @@ interface TingClientCacherInterface {
   /**
    * Set the cache
    *
-   * @param $key
-   * @param $value
+   * @param string $key
+   * @param string $value
    *
-   * @return mixed
    */
   function set($key, $value);
 
   /**
    * Get the cache
    *
-   * @param $key
+   * @param string $key
    *
    * @return mixed
    */
@@ -28,7 +27,6 @@ interface TingClientCacherInterface {
   /**
    * Clear the cache
    *
-   * @return mixed
    */
   function clear();
 }

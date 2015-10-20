@@ -25,7 +25,7 @@ class TingClientCommon {
   /**
    * Convert an url to a filename [http://openadhl.addi.dk/1.1/adhl.xsd -> openadhl-addi-dk-1-1-adhl-xsd]
    *
-   * @param $url
+   * @param string $url
    *
    * @return string
    */
@@ -43,8 +43,8 @@ class TingClientCommon {
   /**
    * Check if xsd_url is set. If not get it from given url and store it in tmp dir for later use
    *
-   * @param string $check_data
-   *  Url to the xsd
+   * @param array $xsd_url
+   * @param array $params
    *
    * @TODO cleanup old files
    *
@@ -77,8 +77,8 @@ class TingClientCommon {
    * Validate (rearrange) given other parameters to follow the order given in
    * the sequence
    *
-   * @param $path
-   * @param $params
+   * @param string $path
+   * @param array $params
    *
    * @return array
    * @throws \Exception

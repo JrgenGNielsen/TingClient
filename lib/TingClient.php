@@ -1,6 +1,6 @@
 <?php
-
-require_once 'ting_client_autoload.php';
+// include autoload function
+require_once __DIR__ . '/ting_client_autoload.php';
 
 /**
  * @file Class TingClient
@@ -24,7 +24,6 @@ class TingClient implements TingClientInterFace {
    *  instance of private memeber request_factory
    */
   private static $requestFactory;
-
   public function getRequestFactory() {
     return self::$requestFactory;
   }
@@ -35,12 +34,10 @@ class TingClient implements TingClientInterFace {
    * @param \TingClientRequestCacheInterface|NULL $cacher
    * @param \TingClientLogger|NULL                $logger
    */
-  public function __construct(TingClientRequestCacheInterface $cacher = NULL, TingClientLogger $logger = NULL) {
+  public function __construct(TingClientCacherInterface $cacher = NULL, TingClientLogger $logger = NULL) {
     $this->logger = (isset($logger)) ? $logger : new TingClientVoidLogger();
     $this->cacher = (isset($cacher)) ? $cacher : new TingClientCacher();
     self::$requestFactory = new TingClientRequestFactory();
-
-    print __FILE__;
   }
 
   /**
@@ -87,7 +84,6 @@ class TingClient implements TingClientInterFace {
    *  response from webservice
    */
   public function doRequest($requestName, $params, $cache_me = TRUE) {
-    $this->sanitizeWebservices();
     $request = $this->getRequestFactory()
       ->getNamedRequest($requestName, $params);
     $result = $this->execute($request);
@@ -119,30 +115,26 @@ class TingClient implements TingClientInterFace {
   }
 
   /**
-   * Replace url placeholders with valid urls.
+   * Set real urls in request factory.
    *
-   * @param array $url_values of the type
-   *  [placeholder => realurl]  eg.:
-   *  array('search' => array('ting_search_url' => 'http://opensearch.addi.dk/4.0.1/')),
-   *
+   * @param array $real_urls
+   *  Array with the real urls: [name => [placeholder => real_url]]
+   *  e.g
+   *  array('forsrights' => array(
+   *    'bibdk_forsrights_url' => 'http://forsrights.addi.dk/1.2/',
+   *    'bibdk_forsrights_xsd' => 'http://forsrights.addi.dk/1.2/forsrights.xsd',
+   *    ),
+   *  );
    */
-  public function sanitizeWebservices($real_urls = array()) {
-    $url_variables = $real_urls;
-    // merge in default urls
-    $url_variables += TingClientWebserviceSettings::getDefaultUrls();
-    foreach ($url_variables as $name => $url) {
-      if (!$url) {
-        throw new Exception('ting-client: Webservice URL is not defined for ' . $name);
-      }
-      $this->getRequestFactory()->set_real_urls($name, $url);
-    }
-  }
+  public function setRealUrls ($real_urls = array()){
+    $this->getRequestFactory()->setRealUrls($real_urls);
 
+  }
 
   /**
    * Set private member cacher
    *
-   * @param \ITingClientCacherInterface $cacher
+   * @param \TingClientCacherInterface $cacher
    */
   public function setCacher(TingClientCacherInterface $cacher) {
     $this->cacher = $cacher;
@@ -160,7 +152,7 @@ class TingClient implements TingClientInterFace {
   /**
    * Get the client appropiate for handling given request.
    *
-   * @param \TingClientRequestInterface $request
+   * @param \TingClientRequest $request
    *
    * @return \TingNanoClient|\TingSoapClient
    * @throws \TingClientSoapException

@@ -14,9 +14,15 @@ class TingClientRequestFactory {
    */
   public $urls;
 
+  private $realUrls = array();
+
   public function __construct() {
     $urls = TingClientWebserviceSettings::getInlineServices();
     $this->urls = $urls;
+  }
+
+  public function setRealUrls ($real_urls) {
+    $this->realUrls = $real_urls;
   }
 
   /**
@@ -39,11 +45,32 @@ class TingClientRequestFactory {
   }
 
   /**
+   * Replace url placeholders with valid urls.
+   *
+   * @param array $url_values of the type
+   *  [placeholder => realurl]  eg.:
+   *  array('search' => array('ting_search_url' => 'http://opensearch.addi.dk/4.0.1/')),
+   *
+   */
+  public function sanitizeWebservices() {
+    $url_variables = $this->realUrls;
+    // merge in default urls
+    $url_variables += TingClientWebserviceSettings::getDefaultUrls();
+    foreach ($url_variables as $name => $url) {
+      if (!$url) {
+        throw new Exception('ting-client: Webservice URL is not defined for ' . $name);
+      }
+      $this->sanitizeUrls($name, $url);
+    }
+  }
+
+
+  /**
    * Return object($className) if it exists and url is set, else throw TingClientException
    *
-   * @param params
+   * @param array $params
    *  parameters for the request
-   * @param name ,
+   * @param string $name ,
    *  the name of the request (for mapping in $urls variable)
    *
    **/
@@ -51,6 +78,7 @@ class TingClientRequestFactory {
     if (empty($this->urls[$name]) || empty($this->urls[$name]['class'])) {
       throw new TingClientException('No webservice defined for ' . $name);
     }
+    $this->sanitizeWebservices();
     $class = $this->urls[$name]['class'];
     if (class_exists($class) && !empty($this->urls[$name]['url'])) {
       $request = new $class($this->urls[$name]['url']);
@@ -71,7 +99,7 @@ class TingClientRequestFactory {
   /**
    * Get a webservice definition
    *
-   * @param $name
+   * @param string $name
    *
    * @return array
    *  Webservice setttings for given name
@@ -115,7 +143,7 @@ class TingClientRequestFactory {
    * @param array  $url_variables .
    *  the real urls to replace with.
    */
-  public function set_real_urls($name, array $url_variables) {
+  public function sanitizeUrls($name, array $url_variables) {
     $settings = $this->urls[$name];
     foreach ($settings as $key => $placeholder) {
       if (is_array($placeholder)) {

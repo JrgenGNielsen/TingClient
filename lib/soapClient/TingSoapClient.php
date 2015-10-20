@@ -6,19 +6,31 @@
  * Wraps php soapclient in a class.
  */
 class TingSoapClient implements TingSoapClientInterface {
+  /**
+   * @var \SoapClient
+   */
   private $soapClient;
+  /**
+   * @var string
+   */
   public $requestBodyString;
   // this is for integration with ting-client
   // @see tingClientRequestAdapter, @see contrib/nanosoap.inc
+  /**
+   * @var array
+   */
   private $curl_info;
   // for test purpose
+  /**
+   * @var string
+   */
   public static $user_agent;
 
   /**
    * Constructor. Initialize soapclient.
    *
-   * @param      $request
-   * @param null $location
+   * @param TingCLientRequest     $request
+   * @param string $location
    *
    * @throws \SoapFault
    */
@@ -84,7 +96,8 @@ class TingSoapClient implements TingSoapClientInterface {
    *
    * @see tingClientRequestAdapter, @see contrib/nanosoap.inc
    *
-   * return private member curl_info
+   * @return array
+   *  private member curl_info
    */
   public function getCurlInfo() {
     return $this->curl_info;
@@ -97,7 +110,7 @@ class TingSoapClient implements TingSoapClientInterface {
    *
    * for integration with ting-client
    *
-   * @param int null $errorcode;
+   * @param int|null $errorcode;
    */
   private function setCurlInfo($errorcode = NULL) {
     if (!empty($errorcode)) {
@@ -112,7 +125,7 @@ class TingSoapClient implements TingSoapClientInterface {
   /**
    * Check errorcode in responseheader.
    *
-   * @param $headerstring string. Responsehader from soapclient
+   * @param string $headerstring. Responsehader from soapclient
    *
    * @return array
    */

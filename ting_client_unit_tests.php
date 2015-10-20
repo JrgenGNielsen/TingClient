@@ -175,7 +175,8 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
         'bibdk_forsrights_xsd' => $xsd_url,
       )
     );
-    $tingClass->sanitizeWebservices($real_urls);
+    $tingClass->setRealUrls($real_urls);
+    $tingClass->getRequestFactory()->sanitizeWebservices();
 
     $this->assertTrue($tingClass
         ->getRequestFactory()->urls['forsrights']['url'] == $url, 'url was sanitized');

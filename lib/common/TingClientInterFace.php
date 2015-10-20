@@ -14,7 +14,7 @@ interface TingClientInterFace {
    *
    * Add webservices to request factory. @see lib/request/TingClientRequestFactory
    *
-   * @param $webservice_settings
+   * @param array $webservice_settings
    *  Array describing the webservice eg.
    *
    *  <name> => array(<url>,<class><xsdNamespace><custom_parse>)
@@ -39,8 +39,6 @@ interface TingClientInterFace {
    *  Name of the request as set in requestfactory
    * @param array     $params
    *  Parameters for the request
-   * @param bool|TRUE $cache_me
-   *  Override other cache settings if needed
    *
    * @return mixed
    *  response from webservice
@@ -54,6 +52,6 @@ interface TingClientInterFace {
    *  [placeholder => realurl]  eg.:
    *  array('ting_search_url' => 'http://opensearch.addi.dk/4.0.1/')
    */
-  public function sanitizeWebservices($url_variables);
+  //public function sanitizeWebservices($url_variables);
 
 }

@@ -8,7 +8,7 @@ class helpFunc {
   /**
    * Chek if given path is an url.
    *
-   * @param $path
+   * @param string $path
    *  The path to check
    *
    * @return bool
@@ -26,7 +26,7 @@ class helpFunc {
   /**
    * Split a string by ':' eg. ors:checkElectronicDeliveryRequest
    *
-   * @param $string
+   * @param string $string
    *  The string to split
    *
    * @return string
@@ -46,7 +46,7 @@ class helpFunc {
    * @param string $element
    *  The string to split
    *
-   * @return bool | string
+   * @return bool|string
    *  Type (namespace) of the string
    */
   public static function getType($element) {
@@ -60,7 +60,7 @@ class helpFunc {
   /**
    * Get soapheader for the request
    *
-   * @param $namespaces
+   * @param array $namespaces
    *  The namespaces in the header
    *
    * @return string
