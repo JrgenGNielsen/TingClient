@@ -16,7 +16,6 @@ class helpFunc {
    */
   public static function isUrl($path) {
     $elements = parse_url($path);
-//print_r($elements);
     if (strtolower($elements['scheme']) == 'http' || strtolower($elements['scheme']) == 'https') {
       return TRUE;
     }
