@@ -40,8 +40,11 @@ class TingClientRequestFactory {
    *  $ret['forsrights']['xsdNamespace'] = array(0=>'http://oss.dbc.dk/ns/forsrights');
    *  $ret['forsrights']['custom_parse'] = bibdk_forsrights_parse_response
    */
-  public function add_to_urls($urls) {
-    $this->urls += $urls;
+  public function addToUrls($urls) {
+    //overwrite inline urls - they might be outdated
+    $this->urls = $urls;
+    // merge in inline urls
+    $this->urls += TingClientWebserviceSettings::getInlineServices();
   }
 
   /**

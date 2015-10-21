@@ -111,7 +111,7 @@ class TingClient implements TingClientInterFace {
    *
    * */
   public function addToRequestFactory($webservice_settings = array()) {
-    $this->getRequestFactory()->add_to_urls($webservice_settings);
+    $this->getRequestFactory()->addToUrls($webservice_settings);
   }
 
   /**
