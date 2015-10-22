@@ -15,7 +15,7 @@ spl_autoload_register(function ($class_name) {
     $path . '/result/',
     $path . '/soapClient/',
     $path . '/xsdparse/',
-    $path . '/common/'
+    $path . '/common/',
   );
 
   foreach ($dirs as $dir) {
