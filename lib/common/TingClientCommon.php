@@ -56,6 +56,9 @@ class TingClientCommon {
     $path = $dir . '/' . $filename;
 
     if (!file_exists($path)) {
+      if (!self::isUrl($xsd_url)) {
+        return $params;
+      }
       // get and store file in temp dir
       $file = file_get_contents($xsd_url);
       // only store valid xsd files
@@ -70,6 +73,19 @@ class TingClientCommon {
     return self::validateXsd($path, $params);
   }
 
+  /**
+   * Check if given string is an url
+   *
+   * @param string
+   *
+   * @return bool
+   */
+  public static function isUrl($string) {
+    if (filter_var($string, FILTER_VALIDATE_URL)) {
+      return TRUE;
+    }
+    return FALSE;
+  }
 
   /**
    * Get the sequence given in params['action'] from schemadefinition.
@@ -85,7 +101,12 @@ class TingClientCommon {
    */
   private static function validateXsd($path, $params) {
     $schema = new xmlSchema();
-    $schema->getFromFile($path);
+    try {
+      $schema->getFromFile($path);
+    }
+    catch(TingClientXmlException $e){
+      return $params;
+    }
 
     $seq = $schema->getSequence($params['action']);
     $arr[] = 'action';
