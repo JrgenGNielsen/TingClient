@@ -10,12 +10,12 @@ class TingClient implements TingClientInterFace {
   /**
    * @var TingClientLogger
    */
-  private $logger;
+  protected $logger;
 
   /*
    * $var TingClientCacherinterface
    */
-  private $cacher;
+  protected $cacher;
 
   /**
    * Get Request factory.
