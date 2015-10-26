@@ -55,14 +55,9 @@ class xmlSchema {
   public function getFromFile($filename) {
     $dom = new DOMDocument();
     if (!@$dom->load($filename)) {
-      // try to download XSDs from URLs
-      $client = new ting_client_class();
-      $XSDurls = $client->getXSDurls();
-      // try to read file again
-      if (!@$dom->load($filename)) {
-        throw new Exception('ting-client: could not open file: ' . $filename);
-      }
+      throw new TingClientXmlException('bad file: ' . $filename);
     }
+
     $this->xpath = new DOMXPath($dom);
   }
 
@@ -74,7 +69,7 @@ class xmlSchema {
   public function getFromUrl($filename) {
     $dom = new DOMDocument();
     if (!@$dom->load($filename)) {
-      die("could not open file: " . $filename . "\n");
+      throw new TingClientXmlException('bad file: ' . $filename);
     }
     $this->xpath = new DOMXPath($dom);
   }
@@ -87,7 +82,7 @@ class xmlSchema {
   public function setFromXml($xml) {
     $dom = new DOMDocument();
     if (!@$dom->loadXML($xml)) {
-      die("could not load xml");
+      throw new TingClientXmlException('bad xml: ' . $xml);
     }
     $this->xpath = new DOMXPath($dom);
   }
@@ -170,7 +165,6 @@ class xmlSchema {
         $ret[] = $node->nodeValue;
       }
     }
-
 
     return $ret;
   }
