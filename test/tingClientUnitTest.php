@@ -166,6 +166,6 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
     //assert that xsd was stored in temporary folder
     $file_name = TingClientCommon::urlToFilename($xsd_url);
     $dir = sys_get_temp_dir();
-    $this->assertTrue(file_exists($dir . '/' . $file_name), 'xsd file stored in temp folder');
+    $this->assertTrue(file_exists($dir . '/' . $file_name), 'xsd file stored in temp folder: ' . $dir);
   }
 }
