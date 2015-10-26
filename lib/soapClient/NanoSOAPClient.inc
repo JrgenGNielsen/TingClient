@@ -157,8 +157,6 @@ class NanoSOAPClient {
     // Render and store the final request string.
     $this->requestBodyString = $this->doc->saveXML();
 
-    print $this->requestBodyString;
-
     // Send the SOAP request to the server via CURL.
     return $this->curlRequest($this->endpoint, 'POST', $this->requestBodyString, $headers);
   }
