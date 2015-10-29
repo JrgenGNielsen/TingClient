@@ -213,6 +213,11 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * @throws \TingClientException
    */
   public function parseResponse($responseString) {
+    if ($this->parameters['outputType'] != 'json') {
+      return $responseString;
+    }
+
+    // Here the output type should be json unless its an error.
     $response = json_decode($responseString);
 
     if (!$response) {
