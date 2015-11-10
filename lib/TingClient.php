@@ -55,17 +55,31 @@ class TingClient implements TingClientInterFace {
     if ($this->cacher->get($cache_key)) {
       return $this->cacher->get($cache_key);
     }
-
     // not found in cache - get the client to do the real call
-
-    // @TODO try catch
-    $soapCLient = $this->getSoapClient($request);
+    try {
+      $soapCLient = $this->getSoapClient($request);
+    }
+    catch(TingClientSoapException $e){
+      $this->logger->log('soap_request_error',array('Exception : ' => $e->getMessage() ));
+    }
     $action = $request->getParameter('action');
     $request->unsetParameter('action');
     $params = $request->getParameters();
+    $this->logger->startTime();
     $response = $soapCLient->call($action, $params);
-
-    $this->cacher->set($cache_key, $response);
+    $this->logger->stopTime();
+    if ($response !== FALSE) {
+      $log = array(
+        'action' => $action,
+        'requestBody' => $soapCLient->requestBodyString,
+        'wsdlUrl' => $request->getWsdlUrl(),
+      );
+      $this->logger->log('soap_request_complete', $log);
+      $this->cacher->set($cache_key, $response);
+    }
+    else{
+      $this->logger->log('soap_request_error',array('Message : ' => 'SOMETHING WENT WRONG' ));
+    }
     return $response;
   }
 
