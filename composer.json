@@ -1,0 +1,29 @@
+{
+    "name": "TingClient",
+    "description": "Talk to dbc webservices",
+    "type": "library",
+    "keywords": ["webservices"],
+    "homepage": "http://dbc.dk",
+    "license": "None",
+    "authors": [
+        {
+            "name": "DBC",
+            "email": "support.dbc.dk"
+        }
+    ],
+    "support": {
+        "issues": "support@dbc.dk"
+    },
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "classmap": [
+            "lib/"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "develop"
+    }
+}
