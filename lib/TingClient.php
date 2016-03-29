@@ -53,7 +53,7 @@ class TingClient implements TingClientInterFace {
     // check cache
     $cache_key = $request->cacheKey();
     if ($this->cacher->get($cache_key)) {
-      return $this->cacher->get($cache_key);
+      return $this->cacher->get($cache_key)->data;
     }
     // not found in cache - get the client to do the real call
     try {
