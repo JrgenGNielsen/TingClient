@@ -213,6 +213,10 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * @throws \TingClientException
    */
   public function parseResponse($responseString) {
+    // outputType should ALWAYS be set
+    if(!isset($this->parameters['outputType'])){
+      $this->parameters['outputType'] = 'xml';
+    }
     if ($this->parameters['outputType'] != 'json') {
       return $responseString;
     }
