@@ -29,7 +29,10 @@ class TingClientCacher implements TingClientCacherInterface {
    * @param mixed $value
    */
   function set($key, $value) {
-    self::$cache[$key] = $value;
+    // use a standard object. If needed set timeout and other stuff on data object
+    $data = new stdClass();
+    $data->data = $value;
+    self::$cache[$key] = $data;
   }
 
   /**
