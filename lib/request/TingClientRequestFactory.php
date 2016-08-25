@@ -84,6 +84,7 @@ class TingClientRequestFactory {
     $this->sanitizeWebservices();
     $class = $this->urls[$name]['class'];
     if (class_exists($class) && !empty($this->urls[$name]['url'])) {
+      /** @var TingClientRequest $request */
       $request = new $class($this->urls[$name]['url']);
       // check xsd file
       if (isset($this->urls[$name]['xsd_url'])) {
