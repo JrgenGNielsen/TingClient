@@ -10,22 +10,6 @@
 class TingClientWebserviceSettings {
   public static function getInlineServices() {
     return array(
-      'agency' => array(
-        'url' => 'agency_search_url',
-        'class' => 'TingClientAgencyRequest'
-      ),
-      'search' => array(
-        'url' => 'ting_search_url',
-        'class' => 'TingClientSearchRequest'
-      ),
-      'object' => array(
-        'url' => 'ting_search_url',
-        'class' => 'TingClientObjectRequest'
-      ),
-      'collection' => array(
-        'url' => 'ting_search_url',
-        'class' => 'TingCollectionRequest'
-      ),
       'adhl' => array(
         'class' => 'OpenAdhlRequest',
         'url' => 'ting_recommendation_url',
