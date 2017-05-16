@@ -5,7 +5,7 @@
  * Base class for requests. Extending methods must implement remaainder methods
  * of TingClientRequestCacheInterface and abstract method processResponse
  */
-abstract class TingClientRequest implements TingClientRequestCacheInterface {
+abstract class TingClientRequest implements \TingClientRequestCacheInterface {
 
   /* suffixes to use for cache variables */
   const CACHELIFETIME = '_cache_lifetime';
@@ -227,15 +227,15 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
     if (!$response) {
       $faultstring = self::parseForFaultString($responseString);
       if (isset($faultstring)) {
-        throw new TingClientException($faultstring);
+        throw new \TingClientException($faultstring);
       }
       else {
-        throw new TingClientException('Unable to decode response as JSON: ' . $responseString);
+        throw new \TingClientException('Unable to decode response as JSON: ' . $responseString);
       }
     }
 
     if (!is_object($response)) {
-      throw new TingClientException('Unexpected JSON response: ' . var_export($response, TRUE));
+      throw new \TingClientException('Unexpected JSON response: ' . var_export($response, TRUE));
     }
 
     return $this->processResponse($response);
@@ -250,9 +250,9 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * @return mixed $faultstring if valid xml is given, NULL if not
    */
   public static function parseForFaultString($xml) {
-    $dom = new DOMDocument();
+    $dom = new \DOMDocument();
     if (@$dom->loadXML($xml)) {
-      $xpath = new DOMXPath($dom);
+      $xpath = new \DOMXPath($dom);
     }
     else {
       return NULL;
@@ -277,7 +277,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
   public static function getValue($object) {
     if (is_array($object)) {
       //array not allowed
-      throw new TingClientException('Unexpected object array in getValue');
+      throw new \TingClientException('Unexpected object array in getValue');
     }
     else {
       return self::getBadgerFishValue($object, '$');
@@ -297,7 +297,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
     $attribute = self::getAttribute($object, $attributeName);
     if (is_array($attribute)) {
       //array not allowed
-      throw new TingClientException('Unexpected object array in getAttributeValue');
+      throw new \TingClientException('Unexpected object array in getAttributeValue');
     }
     else {
       return self::getValue($attribute);

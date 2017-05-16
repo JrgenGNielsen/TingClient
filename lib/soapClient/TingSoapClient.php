@@ -5,7 +5,7 @@
  *
  * Wraps php soapclient in a class.
  */
-class TingSoapClient implements TingSoapClientInterface {
+class TingSoapClient implements \TingSoapClientInterface {
   /**
    * @var \SoapClient
    */
@@ -58,10 +58,10 @@ class TingSoapClient implements TingSoapClientInterface {
       xdebug_disable();
     }
     // constructor causes an php i/o warning on failure. suppress it (@)
-    $this->soapClient = @new SoapClient($wsdl, $options);
+    $this->soapClient = @new \SoapClient($wsdl, $options);
 
     if (!is_object($this->soapClient) || is_soap_fault($this->soapClient)) {
-      throw new SoapFault('500', 'SoapClientFault:Failed to construct. WSDL location is:' . $wsdl);
+      throw new \SoapFault('500', 'SoapClientFault:Failed to construct. WSDL location is:' . $wsdl);
     }
   }
 
@@ -77,7 +77,7 @@ class TingSoapClient implements TingSoapClientInterface {
   public function call($action, $params) {
     try {
       $data = $this->soapClient->$action($params);
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       // set status code to 400 (bad request)
       $this->setCurlInfo('400');
       return FALSE;

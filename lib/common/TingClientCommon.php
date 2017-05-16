@@ -15,7 +15,7 @@ class TingClientCommon {
    *  Whether string is valid xml or not
    */
   public static function validateXml($xml) {
-    $dom = new DOMDocument();
+    $dom = new \DOMDocument();
     if (@$dom->loadXML($xml)) {
       return TRUE;
     }
@@ -100,11 +100,11 @@ class TingClientCommon {
    * @throws \Exception
    */
   private static function validateXsd($path, $params) {
-    $schema = new xmlSchema();
+    $schema = new \xmlSchema();
     try {
       $schema->getFromFile($path);
     }
-    catch(TingClientXmlException $e){
+    catch(\TingClientXmlException $e){
       return $params;
     }
 

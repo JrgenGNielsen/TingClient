@@ -38,7 +38,7 @@ abstract class TingClientLogger {
    */
   public function log($message, $variables, $severity = self::INFO) {
     if (!in_array($severity, self::$levels)) {
-      throw new TingClientException('Unsupported severity: ' . $severity);
+      throw new \TingClientException('Unsupported severity: ' . $severity);
     }
     $this->doLog($message, $variables, $severity);
   }

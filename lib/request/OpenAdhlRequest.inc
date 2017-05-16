@@ -4,7 +4,8 @@
  * @file
  * OpenAdhlRequest class
  **/
-class OpenAdhlRequest extends TingClientRequest Implements TingClientRequestCacheInterface {
+class OpenAdhlRequest extends \TingClientRequest Implements
+  \TingClientRequestCacheInterface {
 
   /**
    * TingClientRequestCacheInterface::cacheKey; get a cachekey

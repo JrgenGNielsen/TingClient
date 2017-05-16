@@ -53,12 +53,12 @@ class xmlSchema {
    * @throws \Exception
    */
   public function getFromFile($filename) {
-    $dom = new DOMDocument();
+    $dom = new \DOMDocument();
     if (!@$dom->load($filename)) {
-      throw new TingClientXmlException('bad file: ' . $filename);
+      throw new \TingClientXmlException('bad file: ' . $filename);
     }
 
-    $this->xpath = new DOMXPath($dom);
+    $this->xpath = new \DOMXPath($dom);
   }
 
   /**
@@ -67,11 +67,11 @@ class xmlSchema {
    * @param string $filename
    */
   public function getFromUrl($filename) {
-    $dom = new DOMDocument();
+    $dom = new \DOMDocument();
     if (!@$dom->load($filename)) {
-      throw new TingClientXmlException('bad file: ' . $filename);
+      throw new \TingClientXmlException('bad file: ' . $filename);
     }
-    $this->xpath = new DOMXPath($dom);
+    $this->xpath = new \DOMXPath($dom);
   }
 
   /**
@@ -80,11 +80,11 @@ class xmlSchema {
    * @param string $xml
    */
   public function setFromXml($xml) {
-    $dom = new DOMDocument();
+    $dom = new \DOMDocument();
     if (!@$dom->loadXML($xml)) {
-      throw new TingClientXmlException('bad xml: ' . $xml);
+      throw new \TingClientXmlException('bad xml: ' . $xml);
     }
-    $this->xpath = new DOMXPath($dom);
+    $this->xpath = new \DOMXPath($dom);
   }
 
   /**
