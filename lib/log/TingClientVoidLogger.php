@@ -4,7 +4,7 @@
  * @file
  * Dummy logger which does nothing
  */
-class TingClientVoidLogger extends \TingClientLogger {
+class TingClientVoidLogger extends TingClientLogger {
   /**
    * Do the actual logging
    * @param $message

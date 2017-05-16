@@ -5,5 +5,5 @@
  * Class NanoSOAPcURLException
  *  Name exception thrown by NanoSOAPCLient
  */
-class NanoSOAPcURLException extends \Exception {
+class NanoSOAPcURLException extends Exception {
 }

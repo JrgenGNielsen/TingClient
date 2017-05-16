@@ -1,6 +1,6 @@
 <?php
 
-class bibdk_forsrights extends \TingClientRequest {
+class bibdk_forsrights extends TingClientRequest {
 
   public function cacheEnable($value = NULL) {
     return TRUE;

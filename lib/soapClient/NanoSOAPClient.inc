@@ -107,7 +107,7 @@ class NanoSOAPClient {
     $this->curl_info = curl_getinfo($ch);
 
     if ($response === FALSE) {
-      throw new \NanoSOAPcURLException(curl_error($ch));
+      throw new NanoSOAPcURLException(curl_error($ch));
     }
 
     // Close the cURL instance before we return.
@@ -145,7 +145,7 @@ class NanoSOAPClient {
 
     // Make a DOM document from the envelope and get the Body tag so we
     // can add our request data to it.
-    $this->doc = new \DOMDocument();
+    $this->doc = new DOMDocument();
     $this->doc->loadXML($this->generateSOAPenvelope());
     $body = $this->doc->getElementsByTagName('Body')->item(0);
 
@@ -206,9 +206,7 @@ class NanoSOAPClient {
       $elem = $this->doc->createElement($value);
     }
     else {
-      $elem = $this->doc->createElement(
-        $name, htmlspecialchars($value, ENT_QUOTES, 'UTF-8', FALSE)
-      );
+      $elem = $this->doc->createElement($name, htmlspecialchars($value, ENT_QUOTES, 'UTF-8', FALSE));
     }
 
     return $elem;

@@ -4,6 +4,6 @@
  * @file named exception
  * Class NanoSOAPcURLException
  */
-class NanoSOAPcURLException extends \Exception {
+class NanoSOAPcURLException extends Exception{
 
 }

@@ -5,5 +5,5 @@
  * Class TingClientSoapException
  * Named exception
  */
-class TingClientSoapException extends \Exception {
+class TingClientSoapException extends Exception {
 }

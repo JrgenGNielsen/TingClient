@@ -6,7 +6,7 @@ require_once __DIR__ . '/ting_client_autoload.php';
  * @file Class TingClient
  * Ting client defines an interface to usage of the TingClient library
  */
-class TingClient implements \TingClientInterFace {
+class TingClient implements TingClientInterFace {
   /**
    * @var TingClientLogger
    */
@@ -34,9 +34,9 @@ class TingClient implements \TingClientInterFace {
    * @param \TingClientRequestCacheInterface|NULL $cacher
    * @param \TingClientLogger|NULL                $logger
    */
-  public function __construct(\TingClientCacherInterface $cacher = NULL, \TingClientLogger $logger = NULL) {
-    $this->logger = (isset($logger)) ? $logger : new \TingClientVoidLogger();
-    $this->cacher = (isset($cacher)) ? $cacher : new \TingClientCacher();
+  public function __construct(TingClientCacherInterface $cacher = NULL, TingClientLogger $logger = NULL) {
+    $this->logger = (isset($logger)) ? $logger : new TingClientVoidLogger();
+    $this->cacher = (isset($cacher)) ? $cacher : new TingClientCacher();
     self::$requestFactory = new TingClientRequestFactory();
   }
 
@@ -49,7 +49,7 @@ class TingClient implements \TingClientInterFace {
    *  Response of request
    * @throws \TingClientSoapException
    */
-  public function execute(\TingClientRequest $request) {
+  public function execute(TingClientRequest $request) {
     // check cache
     $cache_key = $request->cacheKey();
     if ($this->cacher->get($cache_key)) {
@@ -57,7 +57,7 @@ class TingClient implements \TingClientInterFace {
     }
     // not found in cache - get the client to do the real call
     try {
-      $soapClient = $this->getSoapClient($request);
+      $soapCLient = $this->getSoapClient($request);
     }
     catch(TingClientSoapException $e){
       $this->logger->log('soap_request_error',array('Exception : ' => $e->getMessage() ));
@@ -66,12 +66,12 @@ class TingClient implements \TingClientInterFace {
     $request->unsetParameter('action');
     $params = $request->getParameters();
     $this->logger->startTime();
-    $response = $soapClient->call($action, $params);
+    $response = $soapCLient->call($action, $params);
     $this->logger->stopTime();
     if ($response !== FALSE) {
       $log = array(
         'action' => $action,
-        'requestBody' => $soapClient->requestBodyString,
+        'requestBody' => $soapCLient->requestBodyString,
         'wsdlUrl' => $request->getWsdlUrl(),
       );
       $this->logger->log('soap_request_complete', $log);
@@ -100,9 +100,7 @@ class TingClient implements \TingClientInterFace {
   public function doRequest($requestName, $params, $cache_me = TRUE) {
     $request = $this->getRequestFactory()
       ->getNamedRequest($requestName, $params);
-    $response = $this->execute($request);
-
-    $result = $request->parseResponse($response);
+    $result = $this->execute($request);
 
     return $result;
   }
@@ -152,7 +150,7 @@ class TingClient implements \TingClientInterFace {
    *
    * @param \TingClientCacherInterface $cacher
    */
-  public function setCacher(\TingClientCacherInterface $cacher) {
+  public function setCacher(TingClientCacherInterface $cacher) {
     $this->cacher = $cacher;
   }
 
@@ -161,7 +159,7 @@ class TingClient implements \TingClientInterFace {
    *
    * @param \TingClientLogger $logger
    */
-  public function setLogger(\TingClientLogger $logger) {
+  public function setLogger(TingClientLogger $logger) {
     $this->logger = $logger;
   }
 
@@ -173,16 +171,16 @@ class TingClient implements \TingClientInterFace {
    * @return \TingNanoClient|\TingSoapClient
    * @throws \TingClientSoapException
    */
-  private function getSoapClient(\TingClientRequest $request) {
+  private function getSoapClient(TingClientRequest $request) {
     switch ($request->getClientType()) {
       case 'NANO':
         $options = array('namespaces' => $request->getXsdNameSpace());
-        return new \TingNanoClient($request->getWsdlUrl(), $options);
+        return new TingNanoClient($request->getWsdlUrl(), $options);
       case 'SOAPCLIENT';
-        return new \TingSoapClient($request);
+        return new TingSoapClient($request);
       default:
         $class_name = get_class($request);
-        throw new \TingClientSoapException($class_name . ' Request does not define a valid client type');
+        throw new TingClientSoapException($class_name . ' Request does not define a valid client type');
     }
   }
 }

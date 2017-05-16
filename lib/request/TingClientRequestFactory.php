@@ -17,7 +17,7 @@ class TingClientRequestFactory {
   private $realUrls = array();
 
   public function __construct() {
-    $urls = \TingClientWebserviceSettings::getInlineServices();
+    $urls = TingClientWebserviceSettings::getInlineServices();
     $this->urls = $urls;
   }
 
@@ -44,7 +44,7 @@ class TingClientRequestFactory {
     //overwrite inline urls - they might be outdated
     $this->urls = $urls;
     // merge in inline urls
-    $this->urls += \TingClientWebserviceSettings::getInlineServices();
+    $this->urls += TingClientWebserviceSettings::getInlineServices();
   }
 
   /**
@@ -58,10 +58,10 @@ class TingClientRequestFactory {
   public function sanitizeWebservices() {
     $url_variables = $this->realUrls;
     // merge in default urls
-    $url_variables += \TingClientWebserviceSettings::getDefaultUrls();
+    $url_variables += TingClientWebserviceSettings::getDefaultUrls();
     foreach ($url_variables as $name => $url) {
       if (!$url) {
-        throw new \Exception('ting-client: Webservice URL is not defined for ' . $name);
+        throw new Exception('ting-client: Webservice URL is not defined for ' . $name);
       }
       $this->sanitizeUrls($name, $url);
     }
@@ -79,7 +79,7 @@ class TingClientRequestFactory {
    **/
   public function getNamedRequest($name, $params) {
     if (empty($this->urls[$name]) || empty($this->urls[$name]['class'])) {
-      throw new \TingClientException('No webservice defined for ' . $name);
+      throw new TingClientException('No webservice defined for ' . $name);
     }
     $this->sanitizeWebservices();
     $class = $this->urls[$name]['class'];
@@ -88,7 +88,7 @@ class TingClientRequestFactory {
       $request = new $class($this->urls[$name]['url']);
       // check xsd file
       if (isset($this->urls[$name]['xsd_url'])) {
-        $params = \TingClientCommon::checkXsd($this->urls[$name]['xsd_url'], $params);
+        $params = TingClientCommon::checkXsd($this->urls[$name]['xsd_url'], $params);
       }
       if (isset($this->urls[$name]['xsdNamespace'])) {
         $request->setXsdNameSpace($this->urls[$name]['xsdNamespace']);
@@ -96,7 +96,7 @@ class TingClientRequestFactory {
       $request->setParameters($params);
       return $request;
     }
-    throw new \TingClientException('No webservice url defined for ' . $name);
+    throw new TingClientException('No webservice url defined for ' . $name);
   }
 
 

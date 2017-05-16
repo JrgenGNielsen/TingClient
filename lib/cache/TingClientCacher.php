@@ -4,7 +4,7 @@
  * @file Class TingClientCacher
  * Default implementation - override in extending methods
  */
-class TingClientCacher implements \TingClientCacherInterface {
+class TingClientCacher implements TingClientCacherInterface {
 
   /**
    * @var array
@@ -30,7 +30,7 @@ class TingClientCacher implements \TingClientCacherInterface {
    */
   function set($key, $value) {
     // use a standard object. If needed set timeout and other stuff on data object
-    $data = new \stdClass();
+    $data = new stdClass();
     $data->data = $value;
     self::$cache[$key] = $data;
   }

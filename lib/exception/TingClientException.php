@@ -5,6 +5,6 @@
  * Class TingClientException
  * Named exception
  */
-class TingClientException extends \Exception {
+class TingClientException extends Exception {
 }
 
