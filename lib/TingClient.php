@@ -100,7 +100,9 @@ class TingClient implements TingClientInterFace {
   public function doRequest($requestName, $params, $cache_me = TRUE) {
     $request = $this->getRequestFactory()
       ->getNamedRequest($requestName, $params);
-    $result = $this->execute($request);
+
+    $response = $this->execute($request);
+    $result = $request->parseResponse($response);
 
     return $result;
   }
