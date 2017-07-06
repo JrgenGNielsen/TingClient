@@ -168,7 +168,7 @@ class TingClient implements TingClientInterFace {
    *
    * @param \TingClientRequest $request
    *
-   * @return \TingNanoClient|\TingSoapClient
+   * @return \TingNanoClient|\TingSoapClient|\MicroCURL
    * @throws \TingClientSoapException
    */
   private function getSoapClient(TingClientRequest $request) {
@@ -178,6 +178,8 @@ class TingClient implements TingClientInterFace {
         return new TingNanoClient($request->getWsdlUrl(), $options);
       case 'SOAPCLIENT';
         return new TingSoapClient($request);
+      case 'MICROCURL':
+        return new MicroCURL();
       default:
         $class_name = get_class($request);
         throw new TingClientSoapException($class_name . ' Request does not define a valid client type');
