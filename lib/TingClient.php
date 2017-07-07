@@ -179,7 +179,7 @@ class TingClient implements TingClientInterFace {
       case 'SOAPCLIENT';
         return new TingSoapClient($request);
       case 'MICROCURL':
-        return new MicroCURL();
+        return new MicroCURL(NULL, $request);
       default:
         $class_name = get_class($request);
         throw new TingClientSoapException($class_name . ' Request does not define a valid client type');
