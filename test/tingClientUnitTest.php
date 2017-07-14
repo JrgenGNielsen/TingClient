@@ -33,13 +33,13 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
 
     $url = 'http://forsrights.addi.dk/1.2/forsrights.wsdl';
     $request = new TestRequest($url, 'NANO');
-
     $soap = $method->invokeArgs($tingClass, array($request));
     $this->assertTrue($soap instanceof TingNanoClient);
 
-    $request = new TestRequest($url, 'SOAPCLIENT');
+    $request = new TestRequest($url, 'REST');
+    $request->setRequestMethod('REST');
     $soap = $method->invokeArgs($tingClass, array($request));
-    $this->assertTrue($soap instanceof TingSoapClient);
+    $this->assertTrue($soap instanceof TingRestClient);
 
     $request = new TestRequest($url, 'HEST');
     try {
