@@ -23,77 +23,29 @@
 /**
  * \brief Class for handling cURL
  *
- * Example:
+ * Examples:
  *
- * $curl = new curl(); \n
- * print_r($curl->get(array("http://checkip.dbc.dk/","http://no.such_domain.net"))); // returns array \n
- * $curl->close(); \n
+ * $curl = new MicroCURL;
+ * print_r($curl->get("http://checkip.dbc.dk/"));     // returns string
+ * print_r($curl->get("http://kundeservice.dbc.dk")); // returns string
+ * print_r($curl->get("http://no.such_domain.net"));  // returns string
+ * $curl->close();
  *
- * Example:
+ * $curl = new MicroCURL;
+ * $curl->set_timeout(10);                    // returns TRUE | FALSE
+ * $curl->set_proxy("someproxy.dk:1020", $n); // returns TRUE | FALSE
+ * $curl->set_post_xml("<xml>foobar</xml>");  // returns TRUE | FALSE
+ * $res = $curl->get();                       // returns array
+ * $curl->close();
  *
- * $curl = new curl(); \n
- * $curl->set_url("http://checkip.dbc.dk/",0);     // returns TRUE | FALSE \n
- * $handle_id = $curl->get_next_handle(); \n
- * $curl->set_url("http://no.such_domain.net",$handle_id);  // returns TRUE | FALSE \n
- * print_r($curl->get());                          // returns array \n
- * $curl->close(); \n
- *
- * Example:
- *
- * $curl = new curl(); \n
- * print_r($curl->get("http://checkip.dbc.dk/"));     // returns string \n
- * print_r($curl->get("http://kundeservice.dbc.dk")); // returns string \n
- * print_r($curl->get("http://no.such_domain.net"));  // returns string \n
- * $curl->close(); \n
- *
- * Example:
- *
- * $curl = new curl(); \n
- * set_url("http://lxr.php.net/");                 // returns TRUE | FALSE \n
- * set_option(CURLOPT_PROXY,"phobos.dbc.dk:3128"); // returns TRUE | FALSE \n
- * echo $res = $curl->get();                       // returns string \n
- * $curl->get_option();                            // returns array \n
- * $curl->get_status();                            // returns array \n
- * $curl->get_status('http_code');                 // returns string \n
- * $curl->has_error();                             // returns string | FALSE \n
- * $curl->close(); \n
- *
- * Example:
- *
- * $curl = new curl(); \n
- * $curl->set_multiple_options($options_array)  // returns TRUE | FALSE \n
- * $curl->set_option($option,$value,$n)         // returns TRUE | FALSE \n
- * $curl->set_proxy("phobos.dbc.dk:3128", $n)   // returns TRUE | FALSE \n
- * $curl->set_url("http://lxr.php.net/");       // returns TRUE | FALSE \n
- * $res = $curl->get();                         // returns array \n
- * $curl->get_option();                         // returns array \n
- * $curl->get_option(CURLOPT_URL);              // returns array \n
- * $curl->get_option(CURLOPT_PROXY,$n);         // returns string \n
- * $curl->get_status();                         // returns array \n
- * $curl->get_status('http_code');              // returns array \n
- * $curl->get_status('http_code',$n);           // returns string \n
- * $curl->has_error();                          // returns array \n
- * $curl->has_error($n);                        // returns string | FALSE \n
- * $curl->close(); \n
- *
- *
- * Example:
- * $curl = new curl(); \n
- * $curl->set_timeout(10);                    // returns TRUE | FALSE \n
- * $curl->set_proxy("someproxy.dk:1020", $n); // returns TRUE | FALSE \n
- * $curl->set_post_xml("<xml>foobar</xml>");  // returns TRUE | FALSE \n
- * $res = $curl->get();                       // returns array \n
- * $curl->close(); \n
- *
- *
- * Example:
- * $curl = new curl(); \n
- * $curl->set_post(array("foo" => "bar"); // returns TRUE | FALSE \n
- * $res = $curl->get();                   // returns array \n
- * $curl->close(); \n
+ * $curl = new MicroCURL;
+ * $curl->set_post(array("foo" => "bar"); // returns TRUE | FALSE
+ * $res = $curl->get();                   // returns array
+ * $curl->close();
  *
  */
-class MicroCURL implements TingSoapClientInterface {
+
+ class MicroCURL {
 
   ///////////////////////////////////////
   // PRIVATE VARIABLES DO NOT CHANGE!!!//
@@ -129,11 +81,15 @@ class MicroCURL implements TingSoapClientInterface {
    * @var mixed
    */
   private $curl_options;
-  private $curl_default_options;
   private $curl_handle;
   private $wait_for_connections;
   private $curl_content;
-
+  private $curl_default_options = array(
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HEADER => FALSE,
+    CURLOPT_RETURNTRANSFER => TRUE
+  );
+  
 
   ////////////////////
   // PUBLIC METHODS //
@@ -149,29 +105,19 @@ class MicroCURL implements TingSoapClientInterface {
    *   The request to handle ( @see TingClientRequest )
    */
 
-  public function __construct($url = NULL, $request = NULL) {
-    /**
-     * Default global options
-     * Should be defined in some config-file
-     * @var    mixed
-     */
-    $this->curl_default_options = array(
-      CURLOPT_TIMEOUT => 30,
-      CURLOPT_HEADER => FALSE,
-      CURLOPT_RETURNTRANSFER => TRUE
-    );
-
-    $this->curl_options = null;
-    $this->curl_status = null;
-    $this->wait_for_connections = PHP_INT_MAX;
-
+  public function __construct(array $curl_default_options = NULL) {
+    
     if (!function_exists('curl_init')) {
       throw new MicroCURLException("PHP was not built with curl, rebuild PHP to use the curl class.");
     }
 
-    if (!isset($this->curl_default_options)) {
-      throw new MicroCURLException('$curl_default_options is not defined. See the class description for usage');
-    }
+    if (!empty($curl_default_options)) {
+      $this->curl_default_options = $curl_default_options;
+    };
+
+    $this->curl_options = NULL;
+    $this->curl_status = NULL;
+    $this->wait_for_connections = PHP_INT_MAX;
 
     $this->curl_handle[] = curl_init();
     $this->set_multiple_options($this->curl_default_options);
@@ -579,12 +525,10 @@ class MicroCURL implements TingSoapClientInterface {
       curl_close($this->curl_handle[$key]);
     }
     $this->curl_handle = null;
-// keep the multihandle in order to reuse sockets
+    // keep the multihandle in order to reuse sockets
     //curl_multi_close($this->curl_multi_handle);
     //$this->curl_multi_handle = null ;
   }
-
-
 
   /////////////////////
   // PRIVATE METHODS //
@@ -606,15 +550,6 @@ class MicroCURL implements TingSoapClientInterface {
     }
   }
 
-
-  public function call($action, $params) {
-    // TODO: Implement call() method.
-  }
-
-  public function getCurlInfo() {
-    // TODO: Implement getCurlInfo() method.
-    return $this->get_status();
-  }
 }
 
 class MicroCURLException extends Exception {

@@ -7,6 +7,7 @@ require_once __DIR__ . '/ting_client_autoload.php';
  * Ting client defines an interface to usage of the TingClient library
  */
 class TingClient implements TingClientInterFace {
+
   /**
    * @var TingClientLogger
    */
@@ -49,7 +50,7 @@ class TingClient implements TingClientInterFace {
    *  Response of request
    * @throws \TingClientSoapException
    */
-  public function execute(TingClientRequest $request) {
+  public function execute(TingClientRequest $request, $method = 'SOAP') {
     // check cache
     $cache_key = $request->cacheKey();
     if ($this->cacher->get($cache_key)) {
@@ -60,25 +61,31 @@ class TingClient implements TingClientInterFace {
       $soapCLient = $this->getSoapClient($request);
     }
     catch(TingClientSoapException $e){
-      $this->logger->log('soap_request_error',array('Exception : ' => $e->getMessage() ));
+      $this->logger->log('request_error', array('Exception : ' => $e->getMessage() ));
     }
     $action = $request->getParameter('action');
-    $request->unsetParameter('action');
+    if ($action) {
+      $request->unsetParameter('action');
+    }
     $params = $request->getParameters();
     $this->logger->startTime();
+    
     $response = $soapCLient->call($action, $params);
     $this->logger->stopTime();
+    $log_msg = array(
+      'action' => $action,
+      'params' => http_build_query($params),
+      'requestBody' => $soapCLient->getRequestBodyString(),
+      'wsdlUrl' => $request->getWsdlUrl(),
+      'requestMethod' => $request->getRequestMethod(),
+    );
     if ($response !== FALSE) {
-      $log = array(
-        'action' => $action,
-        'requestBody' => $soapCLient->requestBodyString,
-        'wsdlUrl' => $request->getWsdlUrl(),
-      );
-      $this->logger->log('soap_request_complete', $log);
+      $this->logger->log('request_complete', $log_msg);
       $this->cacher->set($cache_key, $response);
     }
     else{
-      $this->logger->log('soap_request_error',array('Message : ' => 'SOMETHING WENT WRONG' ));
+      $log_msg['error'] = 'No response from webservice.';
+      $this->logger->log('request_error', $log_msg);
     }
     return $response;
   }
@@ -168,18 +175,16 @@ class TingClient implements TingClientInterFace {
    *
    * @param \TingClientRequest $request
    *
-   * @return \TingNanoClient|\TingSoapClient|\MicroCURL
+   * @return \TingNanoClient|\TingSoapClient|\TingRestClient
    * @throws \TingClientSoapException
    */
   private function getSoapClient(TingClientRequest $request) {
-    switch ($request->getClientType()) {
-      case 'NANO':
+    switch ($request->getRequestMethod()) {
+      case 'SOAP':
         $options = array('namespaces' => $request->getXsdNameSpace());
         return new TingNanoClient($request->getWsdlUrl(), $options);
-      case 'SOAPCLIENT';
-        return new TingSoapClient($request);
-      case 'MICROCURL':
-        return new MicroCURL(NULL, $request);
+      case 'REST':
+        return new TingRestClient($request);
       default:
         $class_name = get_class($request);
         throw new TingClientSoapException($class_name . ' Request does not define a valid client type');

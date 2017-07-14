@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @file  Interface IClientInterface
+ * @file  Interface TingClientAgentInterface
  *
  * Interface for clients used in TingClientRequestAdapter
  * @see lib/adapter/TingClientRequestAdapter
  *
  */
-interface TingSoapClientInterface {
+interface TingClientAgentInterface {
   /**
    * Make a SOAP request.
    *
@@ -30,4 +30,12 @@ interface TingSoapClientInterface {
    * @see http://php.net/manual/en/function.curl-getinfo.php
    */
   public function getCurlInfo();
+
+  /**
+   * Return requestBodyString.
+   *
+   * @return string
+   */
+  public function getRequestBodyString();
+
 }

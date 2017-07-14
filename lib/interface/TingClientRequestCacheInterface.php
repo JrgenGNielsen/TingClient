@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file  Interface TingClientRequestCacheInterface
+ * @file Interface TingClientRequestCacheInterface
  *
  */
 interface TingClientRequestCacheInterface {

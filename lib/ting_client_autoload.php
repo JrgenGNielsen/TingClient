@@ -10,10 +10,12 @@ spl_autoload_register(function ($class_name) {
     $path . '/cache/',
     $path . '/request/',
     $path . '/exception/',
+    $path . '/interface/',
     $path . '/adapter/',
     $path . '/log/',
     $path . '/result/',
     $path . '/soapClient/',
+    $path . '/restClient/',
     $path . '/xsdparse/',
     $path . '/common/',
   );
