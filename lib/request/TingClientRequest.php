@@ -107,10 +107,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    *
    */
   public function setRequestMethod($type) {
-    $this->requestMethod = 'SOAP';
-    if (strtoupper($type) == 'REST') {
-      $this->requestMethod = 'REST';
-    }
+    $this->requestMethod = (strtoupper($type) == 'REST') ? 'REST' : 'SOAP';
   }
 
   /**
@@ -204,10 +201,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * @return mixed
    */
   public function getParameter($name) {
-    if (isset($this->parameters[$name])) {
-      return $this->parameters[$name];
-    }
-    return NULL;
+    return (isset($this->parameters[$name])) ? $this->parameters[$name] : NULL;
   }
 
   /**
@@ -236,7 +230,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    */
   public function getOutputType() {
     $output_type = $this->getParameter('outputType');
-    if (!$output_type){
+    if (!$output_type) {
       return 'xml';
     }
     return $output_type;

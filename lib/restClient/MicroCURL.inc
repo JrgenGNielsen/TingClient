@@ -194,6 +194,7 @@
       curl_multi_add_handle($this->curl_multi_handle, $this->curl_handle[$key]);
     }
 
+    $active = null;
     // execute the handles
     do {
       /*
@@ -291,7 +292,7 @@
       foreach ($this->curl_handle as $key => $handle) {
         $this->curl_options[$key][$option] = $value;
         $res = curl_setopt($this->curl_handle[$key], $option, $value);
-        if(!$res){
+        if (!$res) {
           return FALSE;
         }
       }
