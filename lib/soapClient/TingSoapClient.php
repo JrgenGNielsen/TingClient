@@ -5,7 +5,7 @@
  *
  * Wraps php soapclient in a class.
  */
-class TingSoapClient implements TingSoapClientInterface {
+class TingSoapClient implements TingClientAgentInterface {
   /**
    * @var \SoapClient
    */

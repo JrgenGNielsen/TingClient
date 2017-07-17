@@ -18,18 +18,27 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * @var string
    */
   protected $cacheKey;
+  
   /**
    * @var string
    */
   private $nameSpace;
+  
   /**
    * @var array
    */
   private $xsdNameSpace;
+  
   /**
    * @var string
    */
   private $wsdlUrl;
+  
+  /**
+   * @var string
+   */
+  private $requestMethod;
+  
   /**
    * @var array
    */
@@ -92,13 +101,23 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
 
 
   /**
-   * Get ClientType
+   * Set request method. SOAP or REST
+   *
+   * @param $type string
+   *
+   */
+  public function setRequestMethod($type) {
+    $this->requestMethod = (strtoupper($type) == 'REST') ? 'REST' : 'SOAP';
+  }
+
+  /**
+   * Get request method.
    *
    * @return string
    *
    */
-  public function getClientType() {
-    return 'NANO';
+  public function getRequestMethod() {
+    return !empty($this->requestMethod) ? $this->requestMethod : 'SOAP';
   }
 
   /**
@@ -182,7 +201,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * @return mixed
    */
   public function getParameter($name) {
-    return $this->parameters[$name];
+    return (isset($this->parameters[$name])) ? $this->parameters[$name] : NULL;
   }
 
   /**
@@ -203,7 +222,20 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
     return $this->parameters;
   }
 
-
+  /**
+   * Get outputType parameter.
+   * Override in extending classes, if needed.
+   *
+   * @return string
+   */
+  public function getOutputType() {
+    $output_type = $this->getParameter('outputType');
+    if (!$output_type) {
+      return 'xml';
+    }
+    return $output_type;
+  }
+  
   /**
    * Check if response can be decoded
    *
@@ -213,12 +245,10 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * @throws \TingClientException
    */
   public function parseResponse($responseString) {
-    // outputType should ALWAYS be set
-    if(!isset($this->parameters['outputType'])){
-      $this->parameters['outputType'] = 'xml';
-    }
-    if ($this->parameters['outputType'] != 'json') {
-      return $responseString;
+
+    $output_type = $this->getOutputType();
+    if ($output_type != 'json') {
+      return $this->$responseString;
     }
 
     // Here the output type should be json unless its an error.

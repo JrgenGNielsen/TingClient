@@ -45,6 +45,7 @@ class TingClientRequestFactory {
     $this->urls = $urls;
     // merge in inline urls
     $this->urls += TingClientWebserviceSettings::getInlineServices();
+    
   }
 
   /**
@@ -87,18 +88,20 @@ class TingClientRequestFactory {
       /** @var TingClientRequest $request */
       $request = new $class($this->urls[$name]['url']);
       // check xsd file
-      if (isset($this->urls[$name]['xsd_url'])) {
+      if (!empty($this->urls[$name]['xsd_url'])) {
         $params = TingClientCommon::checkXsd($this->urls[$name]['xsd_url'], $params);
       }
-      if (isset($this->urls[$name]['xsdNamespace'])) {
+      if (!empty($this->urls[$name]['xsdNamespace'])) {
         $request->setXsdNameSpace($this->urls[$name]['xsdNamespace']);
+      }
+      if (!empty($this->urls[$name]['method'])) {
+        $request->setRequestMethod($this->urls[$name]['method']);
       }
       $request->setParameters($params);
       return $request;
     }
     throw new TingClientException('No webservice url defined for ' . $name);
   }
-
 
   /**
    * Get a webservice definition
