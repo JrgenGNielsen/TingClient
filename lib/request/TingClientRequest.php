@@ -248,7 +248,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
 
     $output_type = $this->getOutputType();
     if ($output_type != 'json') {
-      return $this->$responseString;
+      return $responseString;
     }
 
     // Here the output type should be json unless its an error.
