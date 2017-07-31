@@ -77,7 +77,7 @@ class TingClient implements TingClientInterFace {
       'params' => http_build_query($params),
       'requestBody' => $soapCLient->getRequestBodyString(),
       'wsdlUrl' => $request->getWsdlUrl(),
-      'requestMethod' => $request->getRequestMethod(),
+      'clientType' => $request->getClientType(),
     );
     if ($response !== FALSE) {
       $this->logger->log('request_complete', $log_msg);
@@ -181,10 +181,12 @@ class TingClient implements TingClientInterFace {
    * @throws \TingClientSoapException
    */
   private function getSoapClient(TingClientRequest $request) {
-    switch ($request->getRequestMethod()) {
-      case 'SOAP':
+    switch ($request->getClientType()) {
+      case 'NANOCLIENT':
         $options = array('namespaces' => $request->getXsdNameSpace());
         return new TingNanoClient($request->getWsdlUrl(), $options);
+      case 'SOAPCLIENT':
+        return new TingSoapClient($request);
       case 'REST':
         return new TingRestClient($request);
       default:

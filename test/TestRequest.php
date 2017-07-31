@@ -2,14 +2,12 @@
 class TestRequest extends TingClientRequest {
   public $clientType;
 
-  public function __construct($wsdlUrl, $clientype = 'NANO') {
+  public function __construct($wsdlUrl, $clientype = 'NANOCLIENT') {
     $this->clientType = $clientype;
-    $this->requestMethod = 'SOAP';
     parent::__construct($wsdlUrl);
   }
 
-// overwrite parent method
-// - NB: replaced by getRequestMethod()
+  // overwrite parent method
   public function getClientType() {
     return $this->clientType;
   }

@@ -99,25 +99,15 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
     return !empty($this->xsdNameSpace) ? $this->xsdNameSpace : FALSE;
   }
 
-
   /**
-   * Set request method. SOAP or REST
-   *
-   * @param $type string
-   *
-   */
-  public function setRequestMethod($type) {
-    $this->requestMethod = (strtoupper($type) == 'REST') ? 'REST' : 'SOAP';
-  }
-
-  /**
-   * Get request method.
-   *
+   * Get ClientType
+   * Set request client: NANOCLIENT, SOAPCLIENT or REST
    * @return string
    *
+   * To be overwritten in the TingClientRequest, if not the default.
    */
-  public function getRequestMethod() {
-    return !empty($this->requestMethod) ? $this->requestMethod : 'SOAP';
+  public function getClientType() {
+    return 'NANOCLIENT';
   }
 
   /**

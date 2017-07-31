@@ -94,9 +94,6 @@ class TingClientRequestFactory {
       if (!empty($this->urls[$name]['xsdNamespace'])) {
         $request->setXsdNameSpace($this->urls[$name]['xsdNamespace']);
       }
-      if (!empty($this->urls[$name]['method'])) {
-        $request->setRequestMethod($this->urls[$name]['method']);
-      }
       $request->setParameters($params);
       return $request;
     }
