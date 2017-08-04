@@ -214,7 +214,10 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
 
   /**
    * Get outputType parameter.
-   * Override in extending classes, if needed.
+   *
+   * Note: outputType is set as a parameter in the call to do_request()
+   *       Override in extending classes, if outputType 
+   *       isn't a parameter to the webservice call.
    *
    * @return string
    */
