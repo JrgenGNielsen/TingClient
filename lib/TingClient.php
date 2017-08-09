@@ -105,6 +105,7 @@ class TingClient implements TingClientInterFace {
    *  response from webservice
    */
   public function doRequest($requestName, $params, $cache_me = TRUE) {
+
     $request = $this->getRequestFactory()
       ->getNamedRequest($requestName, $params);
 
@@ -187,6 +188,7 @@ class TingClient implements TingClientInterFace {
         return new TingNanoClient($request->getWsdlUrl(), $options);
       case 'SOAPCLIENT':
         return new TingSoapClient($request);
+      case 'MICROCURL':
       case 'REST':
         return new TingRestClient($request);
       default:
@@ -194,4 +196,5 @@ class TingClient implements TingClientInterFace {
         throw new TingClientSoapException($class_name . ' Request does not define a valid client type');
     }
   }
+  
 }
