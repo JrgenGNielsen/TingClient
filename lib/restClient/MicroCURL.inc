@@ -114,7 +114,6 @@
     if (!empty($curl_default_options)) {
       $this->curl_default_options = $curl_default_options;
     };
-
     $this->curl_options = NULL;
     $this->curl_status = NULL;
     $this->wait_for_connections = PHP_INT_MAX;

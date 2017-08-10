@@ -2,7 +2,7 @@
 
 /**
  * @file Class TingClientRequestInterface
- * Base class for requests. Extending methods must implement remaainder methods
+ * Base class for requests. Extending methods must implement remainder methods
  * of TingClientRequestCacheInterface and abstract method processResponse
  */
 abstract class TingClientRequest implements TingClientRequestCacheInterface {
