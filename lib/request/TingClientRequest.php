@@ -18,27 +18,27 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * @var string
    */
   protected $cacheKey;
-  
+
   /**
    * @var string
    */
   private $nameSpace;
-  
+
   /**
    * @var array
    */
   private $xsdNameSpace;
-  
+
   /**
    * @var string
    */
   private $wsdlUrl;
-  
+
   /**
    * @var string
    */
   private $requestMethod;
-  
+
   /**
    * @var array
    */
@@ -216,19 +216,19 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    * Get outputType parameter.
    *
    * Note: outputType is set as a parameter in the call to do_request()
-   *       Override in extending classes, if outputType 
+   *       Override in extending classes, if outputType
    *       isn't a parameter to the webservice call.
    *
    * @return string
    */
-  public function getOutputType() {
+  public function _getOutputType() {
     $output_type = $this->getParameter('outputType');
     if (!$output_type) {
       return 'xml';
     }
     return $output_type;
   }
-  
+
   /**
    * Check if response can be decoded
    *
@@ -239,7 +239,7 @@ abstract class TingClientRequest implements TingClientRequestCacheInterface {
    */
   public function parseResponse($responseString) {
 
-    $output_type = $this->getOutputType();
+    $output_type = $this->_getOutputType();
     if ($output_type != 'json') {
       return $responseString;
     }
