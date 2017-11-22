@@ -1,4 +1,4 @@
-Ting DBC PHP5 Client
+Ting DBC PHP5 Client Version 1.0
 ====================
 A library[*](#star_mark) for accessing the [Ting][] API developed by [DBC][]
 using PHP5.
