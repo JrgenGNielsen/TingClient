@@ -100,7 +100,11 @@ class TingRestClient extends MicroCURL implements TingClientAgentInterface {
    * @return string
    */
   public function getRequestBodyString() {
-    return NULL;
+    $post = $this->get_option(CURLOPT_POSTFIELDS);
+    if(!empty($post)){
+      return $post;
+    }
+    return 'EMPTY';
   }
 
 }
