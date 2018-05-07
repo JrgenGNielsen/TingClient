@@ -39,7 +39,7 @@ abstract class TingClientLogger {
    *   the raw (not processed entry) if needed
    *
    */
-  public function log($message, $variables, $severity = self::INFO, $raw_entry=array()) {
+  public function log($message, $variables, $severity = self::INFO, $raw_entry = array()) {
     if (!in_array($severity, self::$levels)) {
       throw new TingClientException('Unsupported severity: ' . $severity);
     }
