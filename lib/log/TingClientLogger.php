@@ -6,6 +6,7 @@
  */
 abstract class TingClientLogger {
 
+  // NOTICE this is a direct mapping of druapl WATCHDOG log levels
   const EMERGENCY = 'EMERGENCY';
   const ALERT = 'ALERT';
   const CRITICAL = 'CRITICAL';
@@ -34,13 +35,15 @@ abstract class TingClientLogger {
    * @param string $message The message to log
    * @param array $variables
    * @param string $severity The severity of the message
+   * @param array $raw_entry
+   *   the raw (not processed entry) if needed
    *
    */
-  public function log($message, $variables, $severity = self::INFO) {
+  public function log($message, $variables, $severity = self::INFO, $raw_entry=array()) {
     if (!in_array($severity, self::$levels)) {
       throw new TingClientException('Unsupported severity: ' . $severity);
     }
-    $this->doLog($message, $variables, $severity);
+    $this->doLog($message, $variables, $severity, $raw_entry);
   }
 
   /**
@@ -59,6 +62,15 @@ abstract class TingClientLogger {
     $this->log_time += $time[1] + $time[0];
   }
 
-  abstract protected function doLog($message, $variables, $severity);
+  /**
+   * Abstract method to be implemented by extending classes
+   *
+   * @param string $message The message to log
+   * @param array $variables
+   * @param string $severity The severity of the message
+   * @param array $raw_entry
+   *   the raw (not processed entry)
+   */
+  abstract protected function doLog($message, $variables, $severity, $raw_entry);
 }
 
