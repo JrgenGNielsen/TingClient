@@ -11,7 +11,7 @@ class TingClientVoidLogger extends TingClientLogger {
    * @param $variables
    * @param $severity
    */
-  protected function doLog($message, $variables, $severity) {
+  protected function doLog($message, $variables, $severity, $raw_entry) {
     print $message;
   }
 }
