@@ -1,11 +1,12 @@
 <?php
-require_once '../lib/TingClient.php';
+use PHPUnit\Framework\TestCase;
+//require_once '../lib/TingClient.php';
 require_once 'TestCustomCacher.php';
 require_once 'TestCustomLogger.php';
 require_once 'TestRequest.php';
 
 
-class TestTingClientClass extends PHPUnit_Framework_TestCase {
+class TestTingClientClass extends TestCase {
   /**
    * Test that all objects has been loaded with ting_client_class
    */
@@ -85,12 +86,12 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
     $this->assertTrue($request->cacheKey() == $key, 'trackingId skipped in cachekey');
 
     // test correct response
-    $response = file_get_contents('../test_mockups/forsrights_response.string');
+    $response = file_get_contents(__DIR__ . "/test_mockups/forsrights_response.string");
     //$request->parseResponse($response);
     // $this->assertTrue($response == $parsed_response);
 
     // test bad json - throws a TingClientException
-    $response = file_get_contents('../test_mockups/bad_json.string');
+    $response = file_get_contents(__DIR__ . "/test_mockups/bad_json.string");
     try {
       $request->parseResponse($response);
     } catch (Exception $e) {
@@ -99,7 +100,7 @@ class TestTingClientClass extends PHPUnit_Framework_TestCase {
     }
 
     // test for faultstring
-    $response = file_get_contents('../test_mockups/forsrights_fault.string');
+    $response = file_get_contents(__DIR__ . "/test_mockups/forsrights_fault.string");
     try {
       $request->parseResponse($response);
     } catch (Exception $e) {
