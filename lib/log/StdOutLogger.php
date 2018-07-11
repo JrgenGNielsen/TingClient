@@ -12,7 +12,7 @@
 class StdOutLogger extends \TingClientLogger {
   private static $instance;
   // to log to stdout we need apache to run in foreground - that is what
-  // we do on mesos
+  // we do on Kubernetes.
   private $logfile = 'php://stdout';
   private $date_format = 'H:i:s-d/m/y';
 
@@ -33,18 +33,12 @@ class StdOutLogger extends \TingClientLogger {
    * @param $variables
    * @param $severity
    */
-  public function doLog($message, $variables = array(), $severity = \TingClientLogger::DEBUG) {
+  public function doLog($message, $variables = array(),
+    $severity = \TingClientLogger::DEBUG, $raw_entry) {
 
-    // for now dump
-    // @TODO .. dump is not good for anything else than symfony
-
-    dump($this->log_time);
-
-    dump(func_get_args());
-    // @TODO this is meant for production - uncomment
-    /*if($fp = @ fopen($this->logfile, 'a')) {
+    if($fp = @ fopen($this->logfile, 'a')) {
       fwrite($fp, $message .  '::' . date($this->date_format) );
       fclose($fp);
-    }*/
+    }
   }
 }
