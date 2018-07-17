@@ -36,7 +36,7 @@ class StdOutLogger extends \TingClientLogger {
   public function doLog($message, $variables = array(),
     $severity = \TingClientLogger::DEBUG, $raw_entry) {
 
-    if($fp = @ fopen($this->logfile, 'a')) {
+    if($fp = @ fopen($this->logfile, 'w')) {
       fwrite($fp, $message .  '::' . date($this->date_format) );
       fclose($fp);
     }
