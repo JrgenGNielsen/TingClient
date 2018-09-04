@@ -69,7 +69,7 @@ class TingClient implements TingClientInterFace {
     }
     $params = $request->getParameters();
     $this->logger->startTime();
-    
+
     $response = $soapCLient->call($action, $params);
     $this->logger->stopTime();
     $log_msg = array(
@@ -81,7 +81,9 @@ class TingClient implements TingClientInterFace {
     );
     if ($response !== FALSE) {
       $this->logger->log('request_complete', $log_msg);
-      $this->cacher->set($cache_key, $response);
+      if($request->checkResponse($response)) {
+        $this->cacher->set($cache_key, $response);
+      }
     }
     else{
       $log_msg['error'] = 'No response from webservice.';
@@ -196,5 +198,5 @@ class TingClient implements TingClientInterFace {
         throw new TingClientSoapException($class_name . ' Request does not define a valid client type');
     }
   }
-  
+
 }
